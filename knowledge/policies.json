@@ -1,0 +1,353 @@
+[
+  {
+    "id": "POL-01",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Identidade do hotel",
+    "content": "```yaml\nhotel:\n  id: aurora_grand_resort\n  name: Aurora Grand Resort & Spa\n  category: Luxury Resort\n  stars: 5\n\n  address:\n    street: Avenida Costa Imperial, 1500\n    city: Porto Dourado\n    state: Bahia\n    country: Brasil\n    postal_code: \"45800-000\"\n\n  timezone: America/Bahia\n\n  contacts:\n    reception: \"+55 73 4000-1000\"\n    reservations: \"+55 73 4000-1100\"\n    spa: \"+55 73 4000-1200\"\n    emergency_internal: \"999\"\n    email: atendimento@auroragrand.example\n\n  languages:\n    - pt-BR\n    - en-US\n    - es\n```",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-02",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Regra máxima do assistente",
+    "content": "Esta será a regra número 1 do sistema:\n\n> **O assistente nunca deve inventar informações sobre o resort. Quando não houver informação confiável na base ou quando uma ação exigir autorização humana, deverá informar o hóspede e encaminhar o caso à equipe responsável.**\n\nIsso será aplicado tanto no prompt quanto no workflow.\n\nO agente terá três tipos de resultado:\n\n```text\nAUTO_REPLY\n→ pode responder imediatamente\n\nTOOL_ACTION\n→ precisa executar uma ferramenta\n\nHUMAN_HANDOFF\n→ encaminha para uma pessoa\n```",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-03",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Política de atendimento",
+    "content": "O concierge virtual funciona 24 horas.\n\nEle pode atender:\n\n- dúvidas gerais;\n- horários;\n- localização de instalações;\n- informações de restaurantes;\n- Wi-Fi;\n- atividades;\n- piscina;\n- praia;\n- academia;\n- spa;\n- estacionamento;\n- políticas do resort;\n- pedidos simples;\n- abertura de solicitações;\n- consulta do status de solicitações;\n- direcionamento para departamentos.\n\nEle **não possui autoridade própria** para:\n\n- conceder reembolso;\n- alterar valor de diária;\n- oferecer upgrade gratuito;\n- cancelar cobrança;\n- modificar reserva confirmada sem integração/autorização;\n- revelar dados de outro hóspede;\n- liberar acesso a quartos;\n- informar número de quarto de terceiros;\n- prometer compensações;\n- confirmar disponibilidade sem consultar o sistema correspondente.",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-04",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Check-in e check-out",
+    "content": "### Check-in\n\n```text\nHorário padrão: a partir das 15:00\n```\n\nEarly check-in pode ser solicitado, mas depende da disponibilidade.\n\nO assistente nunca dirá:\n\n> “Seu early check-in está confirmado.”\n\nsem confirmação do sistema.\n\nEle dirá:\n\n> “Posso registrar sua preferência por early check-in. A confirmação depende da disponibilidade da acomodação.”\n\n### Check-out\n\n```text\nHorário padrão: até 12:00\n```\n\nLate check-out:\n\n```text\naté 14:00 → sujeito a disponibilidade\n14:00–18:00 → pode haver cobrança adicional\napós 18:00 → poderá corresponder a uma diária adicional\n```\n\nNenhuma cobrança é confirmada pelo agente sem consulta ao sistema do resort.",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-05",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Política de identificação",
+    "content": "Antes de revelar informações específicas sobre uma estadia, o agente deve verificar a identidade.\n\nPodemos trabalhar com:\n\n```text\nnome do hóspede\n+\nnúmero da reserva\n\nou\n\nnome\n+\ne-mail/telefone parcialmente confirmado\n```\n\nPara solicitações simples de um hóspede já autenticado pelo sistema:\n\n```text\nnúmero do quarto\n+\nsessão WhatsApp previamente vinculada\n```\n\nNunca solicitar:\n\n```text\nsenha\nPIN bancário\nCVV\nsenha de cartão\ntoken de autenticação\nfoto completa de cartão\n```",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-06",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Acomodações",
+    "content": "O resort possui ficticiamente:\n\n| Categoria | Capacidade |\n|---|---:|\n| Deluxe Garden | 2 adultos + 1 criança |\n| Deluxe Ocean | 2 adultos + 1 criança |\n| Premium Ocean | 3 adultos |\n| Family Suite | 2 adultos + 3 crianças |\n| Grand Suite | 4 hóspedes |\n| Villa Aurora | 6 hóspedes |\n| Presidential Villa | 8 hóspedes |\n\nO assistente pode explicar diferenças gerais.\n\nNão deve informar disponibilidade antes de consultar a ferramenta:\n\n```text\ncheck_room_availability()\n```",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-07",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Wi-Fi",
+    "content": "Nome da rede:\n\n```text\nAuroraGuest\n```\n\nAcesso:\n\n```text\nSobrenome do responsável pela reserva\n+\nnúmero da acomodação\n```\n\nÁreas cobertas:\n\n- quartos;\n- lobby;\n- restaurantes;\n- piscina;\n- centro de eventos;\n- academia;\n- áreas sociais.\n\nPara falhas de conexão, o agente deve primeiro orientar:\n\n```text\n1. esquecer a rede AuroraGuest;\n2. reconectar;\n3. verificar número do quarto;\n4. tentar novamente.\n```\n\nPersistindo o problema:\n\n```text\ncreate_service_request(\n  department=\"IT\",\n  priority=\"normal\"\n)\n```",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-08",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Café da manhã",
+    "content": "### Restaurante Aurora\n\n```text\nSegunda a sexta:\n06:30–10:30\n\nSábado, domingo e feriados:\n06:30–11:00\n```\n\nO assistente nunca presume que o café está incluído na tarifa.\n\nPergunta:\n\n> “Meu café está incluso?”\n\nResposta do agente:\n\n```text\n→ consultar reservation_details\n```\n\nSem acesso à reserva:\n\n> “A inclusão depende da tarifa contratada. Posso verificar sua reserva ou direcioná-lo à recepção.”",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-09",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Restaurantes",
+    "content": "## Aurora\n\nBuffet internacional.\n\n```text\nCafé: 06:30–10:30/11:00\nJantar: 18:30–22:30\n```\n\n## Mare\n\nRestaurante de frutos do mar.\n\n```text\n18:00–23:00\n```\n\nNecessita reserva para jantar.\n\n## Ember\n\nSteakhouse premium.\n\n```text\n19:00–23:30\n```\n\nReserva recomendada.\n\n## Lumière\n\nGastronomia contemporânea.\n\n```text\n19:00–23:00\n```\n\nDress code:\n\n```text\nsmart casual\n```\n\n## Palm Beach Club\n\n```text\n11:00–18:00\n```\n\nPetiscos, bebidas e almoço informal.",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-10",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Política alimentar e alergias",
+    "content": "O concierge pode registrar restrições como:\n\n```text\nglúten\nlactose\namendoim\ncastanhas\nfrutos do mar\novos\nvegetariano\nvegano\n```\n\nPorém deve dizer:\n\n> “Vou registrar a informação e comunicar a equipe responsável. Para alergias graves, recomendamos também conversar diretamente com o responsável do restaurante antes do consumo.”\n\nNunca deve garantir:\n\n```text\n“não existe risco de contaminação”\n```",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-11",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Room service",
+    "content": "Disponível:\n\n```text\n24 horas\n```\n\nCardápio reduzido:\n\n```text\n23:00–06:00\n```\n\nPedidos alimentares precisam usar uma ferramenta específica:\n\n```text\ncreate_room_service_order()\n```\n\nO agente deve repetir:\n\n```text\nitens\nquantidade\nquarto\nvalor total\n```\n\nantes da confirmação.",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-12",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Piscinas",
+    "content": "### Piscina principal\n\n```text\n07:00–20:00\n```\n\n### Piscina infinity\n\n```text\n08:00–20:00\n```\n\n### Piscina infantil\n\n```text\n08:00–19:00\n```\n\n### Piscina adults only\n\n```text\n09:00–21:00\nidade mínima: 18 anos\n```\n\nNenhuma piscina possui serviço de salva-vidas 24h.\n\nCrianças devem permanecer acompanhadas por responsável.",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-13",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Praia",
+    "content": "Serviço de praia:\n\n```text\n08:00–18:00\n```\n\nInclui:\n\n- toalhas;\n- cadeiras;\n- guarda-sóis;\n- atendimento de bebidas.\n\nCondições marítimas podem alterar o funcionamento.\n\nO assistente não deve afirmar que o mar está seguro sem informação operacional atualizada.",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-14",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Spa",
+    "content": "## Aurora Wellness Spa\n\n```text\n09:00–21:00\n```\n\nServiços:\n\n- massagem relaxante;\n- massagem terapêutica;\n- pedras quentes;\n- tratamentos faciais;\n- hidroterapia;\n- sauna;\n- experiências para casal.\n\nReserva necessária.\n\nCancelamentos com menos de:\n\n```text\n6 horas\n```\n\npodem gerar cobrança conforme a modalidade contratada.\n\nQualquer recomendação relacionada a condição médica será encaminhada à equipe especializada.",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-15",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Academia",
+    "content": "```text\n05:00–23:00\n```\n\nIdade mínima desacompanhada:\n\n```text\n16 anos\n```\n\nMenores devem seguir as regras de supervisão do resort.",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-16",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Kids Club",
+    "content": "Nome:\n\n```text\nAurora Kids Club\n```\n\nFuncionamento:\n\n```text\n09:00–21:00\n```\n\nFaixa principal:\n\n```text\n4–12 anos\n```\n\nCrianças menores de 4 anos necessitam acompanhamento ou serviço contratado específico.\n\nAlgumas atividades possuem vagas limitadas.",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-17",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Teen Club",
+    "content": "```text\n13–17 anos\n```\n\nFuncionamento:\n\n```text\n10:00–22:00\n```\n\nInclui:\n\n- games;\n- esportes;\n- cinema;\n- atividades recreativas;\n- torneios.",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-18",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Animais",
+    "content": "Política fictícia:\n\n```text\nPet friendly em categorias selecionadas.\n```\n\nLimite padrão:\n\n```text\naté 2 animais por acomodação\naté 15 kg cada\n```\n\nNecessita reserva prévia.\n\nAnimais não podem acessar:\n\n- piscinas;\n- spa;\n- academia;\n- buffet;\n- Kids Club.\n\nCães-guia e animais de assistência devem ser tratados segundo as normas aplicáveis e nunca simplesmente classificados como pets pelo agente.",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-19",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Estacionamento",
+    "content": "Hóspedes:\n\n```text\nestacionamento incluído para 1 veículo por acomodação\n```\n\nVisitantes:\n\n```text\nsujeito a disponibilidade e tarifa vigente\n```\n\nValet:\n\n```text\n24 horas\n```",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-20",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Transporte",
+    "content": "O resort oferece:\n\n```text\ntransfer privativo\ntransfer compartilhado\ntáxi\nmotorista executivo\n```\n\nO assistente não pode confirmar preço sem executar:\n\n```text\nget_transport_quote()\n```\n\nPara aeroporto, deve coletar:\n\n```json\n{\n  \"date\": \"\",\n  \"flight_number\": \"\",\n  \"arrival_time\": \"\",\n  \"passengers\": 0,\n  \"children\": 0,\n  \"luggage\": 0\n}\n```",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-21",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Housekeeping",
+    "content": "Limpeza regular:\n\n```text\n08:00–17:00\n```\n\nTurndown para categorias elegíveis:\n\n```text\n18:00–21:00\n```\n\nPedidos possíveis:\n\n```text\ntoalhas\ntravesseiros\ncobertores\nkit higiene\nágua\nlimpeza adicional\nberço\n```\n\nFluxo:\n\n```text\nhóspede\n↓\nassistente\n↓\ncreate_service_request()\n↓\nhousekeeping\n↓\nstatus\n↓\nhóspede\n```",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-22",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Manutenção",
+    "content": "Exemplos:\n\n```text\nar-condicionado\nchuveiro\nTV\nfechadura\niluminação\nfrigobar\nvazamento\ntomadas\n```\n\nPrioridade padrão:\n\n```text\nNORMAL\n```\n\nSituações como:\n\n```text\ncheiro de queimado\nfaísca\nvazamento significativo\nporta incapaz de trancar\n```\n\nrecebem:\n\n```text\nURGENT\n```",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-23",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Emergências",
+    "content": "Esta área não fica sob decisão livre da IA.\n\nPalavras/intenção envolvendo:\n\n```text\nincêndio\nfogo\nfumaça\ndesmaio\nsangramento grave\ndor no peito\nafogamento\nviolência\nameaça\narma\ncriança desaparecida\ninvasão\n```\n\nacionam:\n\n```text\nEMERGENCY\n```\n\nFluxo:\n\n```text\nMensagem\n    ↓\nDetector de emergência\n    ↓\nNÃO chama RAG como primeira decisão\n    ↓\norientação curta\n+\nalerta equipe\n+\nescalonamento humano imediato\n```\n\nO agente nunca tentará substituir serviços médicos, segurança ou emergência.",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-24",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Segurança e acesso aos quartos",
+    "content": "O assistente nunca:\n\n```text\nfornece uma chave\ngera acesso\nlibera porta\nrevela hóspede de um quarto\nconfirma se alguém está hospedado\ninforma o quarto de uma pessoa\n```\n\nExemplo:\n\n> “Em qual quarto está João Silva?”\n\nResposta:\n\n> “Por privacidade, não posso informar o número da acomodação de outro hóspede. Posso solicitar à recepção que tente entrar em contato com ele.”",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-25",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Achados e perdidos",
+    "content": "Coletar:\n\n```json\n{\n  \"item\": \"\",\n  \"description\": \"\",\n  \"last_seen_location\": \"\",\n  \"last_seen_date\": \"\",\n  \"guest_name\": \"\",\n  \"reservation_id\": \"\",\n  \"contact\": \"\"\n}\n```\n\nCriar:\n\n```text\ncreate_lost_and_found_case()\n```\n\nNunca prometer que o objeto foi encontrado antes da confirmação.",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-26",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Reclamações",
+    "content": "Classificação:\n\n### Baixa\n\n```text\ndemora\ntoalha faltando\npedido incompleto\nruído leve\n```\n\n### Média\n\n```text\nquarto inadequadamente limpo\nserviço não realizado\nproblema recorrente\nruído intenso\n```\n\n### Alta\n\n```text\nsegurança\ndiscriminação\nassédio\nameaça\nproblema sanitário grave\nacidente\ncobrança relevante contestada\n```\n\nAlta prioridade:\n\n```text\nhandoff obrigatório\n```",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-27",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Compensações",
+    "content": "O chatbot **não concede compensação**.\n\nNão pode oferecer autonomamente:\n\n```text\nupgrade\ndiária gratuita\ncrédito\ndesconto\nrefeição grátis\nlate checkout gratuito\nreembolso\n```\n\nPode dizer:\n\n> “Vou registrar o ocorrido e encaminhar à equipe responsável para análise.”",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-28",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Reservas",
+    "content": "O assistente pode:\n\n```text\nconsultar\nexplicar\ncoletar intenção\napresentar opções disponíveis\n```\n\nAlterações devem passar por:\n\n```text\nget_reservation()\n↓\nvalidate_guest()\n↓\ncheck_policy()\n↓\nrequest_change()\n↓\nconfirmação\n```\n\nNunca modificar silenciosamente.",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-29",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Cancelamentos",
+    "content": "Política fictícia:\n\n### Tarifa flexível\n\nCancelamento gratuito até:\n\n```text\n72 horas antes do check-in\n```\n\nApós o prazo:\n\n```text\npoderá haver cobrança equivalente à primeira diária\n```\n\n### Tarifa não reembolsável\n\n```text\npagamento não reembolsável\n```\n\nPorém o agente nunca calcula automaticamente uma penalidade definitiva sem consultar a tarifa vinculada à reserva.",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-30",
+    "hotel_id": "aurora_grand_resort",
+    "title": "No-show",
+    "content": "Quando o hóspede não comparece, aplicam-se as condições específicas da tarifa.\n\nO assistente não presume cobrança.\n\nUsará:\n\n```text\nget_booking_rate_rules()\n```",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-31",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Crianças",
+    "content": "Políticas de preço dependem da acomodação e da tarifa.\n\nPortanto perguntas como:\n\n> “Meu filho de 8 anos paga?”\n\nexigem consulta.\n\nNunca usar uma regra genérica para todos os casos.",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-32",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Visitantes",
+    "content": "Visitantes externos:\n\n```text\nnecessitam cadastro na recepção\ndocumento válido\nautorização conforme política da estadia\n```\n\nVisitantes podem ter restrições de acesso a áreas exclusivas.",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-33",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Eventos",
+    "content": "O resort possui:\n\n```text\nGrand Ballroom\nImperial Hall\nOcean Pavilion\n6 salas executivas\nBeach Events Area\n```\n\nSolicitações comerciais serão enviadas para:\n\n```text\nevents_sales\n```\n\nO assistente coleta:\n\n```text\ndata\nquantidade de pessoas\ntipo do evento\nhospedagem necessária\nalimentação\ntelefone\ne-mail\n```",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-34",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Casamentos",
+    "content": "Lead:\n\n```json\n{\n  \"event_type\": \"wedding\",\n  \"date\": \"\",\n  \"guests\": 0,\n  \"rooms_expected\": 0,\n  \"ceremony\": \"\",\n  \"reception\": \"\",\n  \"contact_name\": \"\",\n  \"phone\": \"\",\n  \"email\": \"\"\n}\n```\n\nEm vez de responder somente “entre em contato conosco”, nosso concierge já transforma a conversa em oportunidade comercial.",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-35",
+    "hotel_id": "aurora_grand_resort",
+    "title": "VIPs",
+    "content": "Podemos criar classificação interna:\n\n```text\nSTANDARD\nVIP\nVVIP\nOWNER\nCORPORATE\n```\n\nMas o agente **nunca menciona essa classificação ao hóspede**.\n\nEla serve para routing e SLA.",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-36",
+    "hotel_id": "aurora_grand_resort",
+    "title": "SLA interno",
+    "content": "Sugestão para nosso resort fictício:\n\n| Categoria | Meta |\n|---|---:|\n| FAQ | imediato |\n| toalha/amenity | 15 min |\n| housekeeping | 20 min |\n| manutenção normal | 30 min |\n| manutenção urgente | 10 min |\n| reclamação | 10 min |\n| emergência | imediata |\n\nEsses tempos serão parâmetros internos, não promessas absolutas ao hóspede.",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-37",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Estados de uma solicitação",
+    "content": "```text\nOPEN\nACKNOWLEDGED\nIN_PROGRESS\nWAITING_GUEST\nCOMPLETED\nCANCELLED\nESCALATED\n```\n\nIsso será muito importante no n8n.\n\nO WhatsApp poderá receber automaticamente:\n\n> “Seu pedido de toalhas foi recebido.”\n\nDepois:\n\n> “A equipe de governança já iniciou o atendimento.”\n\nE finalmente:\n\n> “Seu pedido foi concluído. Posso ajudar em algo mais?”",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-38",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Política antialucinação",
+    "content": "Esta será implementada rigidamente:\n\n```text\nSE informação está na base\n    → responder\n\nSE informação vem de tool confiável\n    → responder\n\nSE dados são insuficientes\n    → pedir informação\n\nSE resposta não está disponível\n    → não inventar\n    → escalar\n\nSE houver conflito entre fontes\n    → não escolher arbitrariamente\n    → consultar sistema oficial/escalar\n```",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  },
+  {
+    "id": "POL-39",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Hierarquia das fontes",
+    "content": "O agente seguirá:\n\n```text\n1. sistema operacional em tempo real\n2. banco estruturado do hotel\n3. políticas oficiais\n4. base de conhecimento\n5. contexto da conversa\n6. conhecimento geral do modelo\n```\n\nPara informações específicas do resort, o nível 6 **não pode ser usado como fonte factual**.",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 1
+  }
+]

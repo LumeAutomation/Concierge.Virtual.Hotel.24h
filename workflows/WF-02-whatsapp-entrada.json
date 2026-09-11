@@ -1,0 +1,85 @@
+﻿{
+  "name": "WF-02 | WhatsApp - AURA | Somente entrada",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "messages"
+        ],
+        "options": {
+          "messageStatusUpdates": []
+        }
+      },
+      "id": "c0b76c62-ef63-4dca-9b38-5b098dcfa2bd",
+      "name": "WhatsApp - receber",
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "aura-whatsapp-inbound"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Apenas entrada: nenhuma mensagem e enviada ao WhatsApp.\nconst output = [];\nfor (const [index, item] of $input.all().entries()) {\n  const root = item.json.body ?? item.json;\n  const values = root.entry\n    ? root.entry.flatMap(entry => (entry.changes ?? []).map(change => change.value))\n    : [root];\n  for (const value of values) {\n    if (!value || value.metadata?.phone_number_id !== '1280781558460646') continue;\n    for (const message of value.messages ?? []) {\n      if (typeof message.id !== 'string' || !/^wamid\\.[A-Za-z0-9+/=_-]{1,480}$/.test(message.id)) {\n        throw new Error('Identificador WhatsApp invalido; evento nao processado.');\n      }\n      if (typeof message.from !== 'string' || !/^[0-9]{6,20}$/.test(message.from)) {\n        throw new Error('Remetente sem numero suportado neste piloto.');\n      }\n      const text = message.type === 'text' ? message.text?.body\n        : '[WhatsApp: mensagem de tipo ' + String(message.type ?? 'desconhecido') + '. Preciso de atendimento humano; midia nao processada neste piloto.]';\n      if (typeof text !== 'string' || !text.trim() || text.length > 2000) {\n        throw new Error('Texto vazio ou acima de 2000 caracteres; revisar execucao.');\n      }\n      output.push({\n        json: {message: text, request_id: message.id, session_id: 'wa_' + message.from},\n        pairedItem: {item: index}\n      });\n    }\n  }\n}\nreturn output;"
+      },
+      "id": "aura-normalize",
+      "name": "Preparar mensagem",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8787/api/chat",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "aura-inbound-engine",
+      "name": "AURA - registrar e responder localmente",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        520,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "WhatsApp - receber": {
+      "main": [
+        [
+          {
+            "node": "Preparar mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar mensagem": {
+      "main": [
+        [
+          {
+            "node": "AURA - registrar e responder localmente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
