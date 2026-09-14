@@ -1,11 +1,2 @@
-﻿__pycache__/
-*.pyc
-.env
-.env.*
-!.env.example
-runtime/
-Acessos
-Instalacao
-Atualizando_N8N
-No-N8n.xlsx
+﻿
 

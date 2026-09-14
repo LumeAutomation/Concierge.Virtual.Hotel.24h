@@ -1,0 +1,27 @@
+(node:6684) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Error fetching feature flags Error [PostHogFetchHttpError]: HTTP error while fetching PostHog: 401
+    at new PostHogFetchHttpError (C:\Users\willa\AppData\Roaming\npm\node_modules\n8n\node_modules\posthog-core\src\index.ts:31:5)
+    at PostHog.<anonymous> (C:\Users\willa\AppData\Roaming\npm\node_modules\n8n\node_modules\posthog-core\src\index.ts:549:17)
+    at step (C:\Users\willa\AppData\Roaming\npm\node_modules\n8n\node_modules\node_modules\tslib\tslib.es6.js:102:23)
+    at Object.next (C:\Users\willa\AppData\Roaming\npm\node_modules\n8n\node_modules\node_modules\tslib\tslib.es6.js:83:53)
+    at fulfilled (C:\Users\willa\AppData\Roaming\npm\node_modules\n8n\node_modules\node_modules\tslib\tslib.es6.js:73:58)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5) {
+  response: Response {
+    [Symbol(state)]: {
+      aborted: false,
+      rangeRequested: false,
+      timingAllowPassed: true,
+      requestIncludesCredentials: true,
+      type: 'default',
+      status: 401,
+      timingInfo: [Object],
+      cacheState: '',
+      statusText: 'Unauthorized',
+      headersList: [HeadersList],
+      urlList: [Array],
+      body: [Object]
+    },
+    [Symbol(headers)]: Headers {}
+  }
+}
