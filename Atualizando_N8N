@@ -1,0 +1,13 @@
+
+
+npm update -g n8n
+
+npm install -g n8n@next
+
+
+Comece o n8n correndo:--tunnel
+n8n start --tunnel
+
+
+https://docs.n8n.io/hosting/installation/npm/#windows-troubleshooting
+

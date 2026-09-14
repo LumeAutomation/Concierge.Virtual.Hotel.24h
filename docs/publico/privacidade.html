@@ -1,0 +1,41 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Política de Privacidade — Aura-Bot</title>
+<style>body{font:17px/1.65 system-ui,sans-serif;color:#172b3a;background:#f5f7fa;margin:0}main{max-width:800px;margin:40px auto;padding:32px;background:white;border-radius:12px}h1,h2{line-height:1.25}h2{margin-top:32px}a{color:#075caa}.notice{padding:16px;background:#fff3d6;border-radius:8px}@media(max-width:600px){main{margin:0;padding:24px}}</style>
+</head>
+<body><main>
+<p class="notice">Minuta para revisão do responsável antes da publicação. Descreve o piloto atual; não representa atendimento de um hotel em produção.</p>
+<h1>Política de Privacidade — Aura-Bot</h1>
+<p>Versão preparada em 14 de setembro de 2026.</p>
+<h2>1. Responsável e contato</h2>
+<p>O Aura-Bot é operado por <strong>Uiliam dos santos avelar</strong>. Para assuntos de privacidade e solicitações sobre seus dados, entre em contato pelo e-mail <a href="mailto:automation.lume@gmail.com">automation.lume@gmail.com</a>.</p>
+<h2>2. Escopo do aplicativo</h2>
+<p>O Aura-Bot é um piloto de concierge virtual com informações fictícias de hotelaria. A integração recebe eventos do WhatsApp e pode encaminhar mensagens para uma aplicação local de demonstração, que produz respostas informativas e protocolos para uma fila de atendimento. O fluxo atual não envia respostas de volta ao WhatsApp, não confirma reservas, não processa pagamentos e não aciona serviços reais de emergência.</p>
+<h2>3. Dados tratados</h2>
+<ul>
+<li>Número de telefone ou identificador do remetente no WhatsApp e nome de perfil, quando fornecidos pela plataforma.</li>
+<li>Conteúdo das mensagens de texto, identificadores das mensagens, tipo de mensagem e metadados de entrega recebidos pela integração.</li>
+<li>Identificador do número comercial destinatário e outros metadados técnicos do evento.</li>
+<li>Respostas geradas localmente, data do registro, protocolos, setor de atendimento, prioridade e situação do encaminhamento.</li>
+<li>Registros técnicos de requisições e execuções, que podem incluir endereço IP e conteúdo dos eventos, conforme a configuração das ferramentas utilizadas.</li>
+</ul>
+<p>O fluxo preparado não baixa arquivos de áudio, imagem ou outros anexos: registra uma indicação do tipo de mensagem para encaminhamento humano. Os metadados desses arquivos podem constar no evento recebido.</p>
+<h2>4. Finalidades</h2>
+<p>Os dados são utilizados para receber e interpretar solicitações, produzir respostas de demonstração, organizar encaminhamentos, evitar registros duplicados e diagnosticar falhas na integração. O piloto utiliza regras locais; o fluxo revisado não envia mensagens a um provedor de inteligência artificial generativa.</p>
+<h2>5. Ferramentas e acesso aos dados</h2>
+<p>O funcionamento utiliza WhatsApp/Meta para transportar eventos, n8n para executar o fluxo e ngrok para disponibilizar o endereço de testes. Os dados passam por esses componentes e podem constar nos respectivos registros técnicos. A aplicação AURA armazena os registros processados em banco local. O responsável pode acessar mensagens e protocolos para operar e verificar o piloto.</p>
+<p>Os serviços externos possuem termos e políticas próprios. O uso desses serviços pode envolver processamento fora do Brasil. Pedidos referentes aos dados mantidos por esses provedores em suas próprias plataformas também podem exigir contato com eles.</p>
+<h2>6. Armazenamento e conservação</h2>
+<p>No piloto atual, não há rotina automática de expiração dos registros do banco local. Os registros permanecem até a exclusão manual pelo responsável. Dados de execução do n8n e de inspeção do túnel podem ter períodos de conservação distintos, conforme suas configurações. Solicitações de exclusão devem considerar essas cópias e eventuais backups, além do banco local.</p>
+<h2>7. Cuidados ao utilizar o piloto</h2>
+<p>Utilize dados fictícios nos testes. Não envie senhas, documentos, informações financeiras ou dados de saúde. A aplicação local tenta omitir alguns conteúdos identificados como sensíveis antes de gravá-los, mas esse filtro não garante a identificação de todos os dados e não elimina o conteúdo já recebido por outras ferramentas da integração.</p>
+<h2 id="exclusao">8. Solicitações de acesso, correção e exclusão</h2>
+<p>Para solicitar informações sobre o tratamento, acesso, correção ou exclusão de dados sob responsabilidade do Aura-Bot, envie um e-mail para <a href="mailto:automation.lume@gmail.com?subject=Privacidade%20Aura-Bot">automation.lume@gmail.com</a>, com o assunto <strong>Privacidade Aura-Bot</strong>.</p>
+<p>Informe o pedido e o número de WhatsApp utilizado, com código do país, ou um protocolo de atendimento para localizar os registros. Não envie senhas nem documentos de identidade no primeiro contato. O responsável poderá solicitar uma confirmação proporcional de identidade para evitar acesso ou exclusão indevidos.</p>
+<p>O atendimento é manual. O responsável informará o resultado da análise e eventuais limitações ou motivos legais para conservar determinados registros. Este canal não exclui automaticamente mensagens do aplicativo WhatsApp do usuário ou registros sob responsabilidade própria de terceiros.</p>
+<h2>9. Atualizações</h2>
+<p>Esta política deverá ser atualizada quando houver mudanças no funcionamento ou no tratamento de dados, especialmente antes do uso com clientes reais, da inclusão de envio de mensagens, de inteligência artificial externa ou de novos serviços.</p>
+</main></body></html>

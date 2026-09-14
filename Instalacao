@@ -1,0 +1,7 @@
+Primeiro - Ter a conta na plataforma do n8n ativa
+Segundo - Instalar o nodeJs na maquina (Nodejs é uma gerenciador de dependencias)
+Terceiro - Instalar o n8n via npm
+Quartro - Verificar se o node e npm esta instalado na maquiva via cmd node -v e npm -v
+Quinto - Instalar o n8n via cmd npm i -g N8n
+Sexto - executa n8n via cmd
+

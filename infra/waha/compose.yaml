@@ -1,0 +1,18 @@
+﻿services:
+  waha:
+    image: devlikeapro/waha:latest
+    container_name: aura-waha
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    env_file:
+      - ../../runtime/waha/.env
+    volumes:
+      - sessions:/app/.sessions
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "2"
+volumes:
+  sessions:

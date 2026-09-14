@@ -1,0 +1,11 @@
+Conta N8n
+automation.lume@gmail.com
+
+
+
+Resetar Senha >>>> n8n user-management:reset
+
+
+n8n user-management:reset
+n8n start --tunnel
+http://localhost:5678
