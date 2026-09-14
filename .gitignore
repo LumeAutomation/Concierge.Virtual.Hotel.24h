@@ -1,2 +1,16 @@
 ﻿
 
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local logs and runtime data
+*.log
+/runtime/
+
+# Local credentials
+.env
+.env.*
+!.env.example
