@@ -1,0 +1,17 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const run=new Function('$','$json',fs.readFileSync(path.join(__dirname,'waha-reply.js'),'utf8'));
+const original={chat_id:'5500000000000@c.us',session_id:'waha_5500000000000_c_us'};
+const select=()=>({item:{json:original}});
+const result={request_id:'test-message-123',persisted:true,reply:'Pedido registrado na fila de demonstracao.'};
+assert.equal(run(select,result).json.session_id,original.session_id);
+assert.equal(run(select,result).json.request_id,result.request_id);
+assert.throws(()=>run(select,{...result,request_id:undefined}));
+assert.throws(()=>run(select,{...result,persisted:false}));
+assert.throws(()=>run(select,{...result,reply:''}));
+assert.throws(()=>run(()=>({item:{json:{chat_id:'123456@g.us'}}}),result));
+assert.throws(()=>run(select,{...result,session_id:'other'}));
+original.chat_id='5500000000000@lid';
+assert.equal(run(select,result).json.session_id,original.session_id);
+console.log('Resposta WAHA: destino individual, persistencia, texto e sessao validados.');

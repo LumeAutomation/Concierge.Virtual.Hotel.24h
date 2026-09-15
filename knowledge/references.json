@@ -1,0 +1,44 @@
+[
+  {
+    "id": "REF-01",
+    "title": "Hilton - Hotel policies",
+    "url": "https://www.hilton.com/en/help-center/hotel-information/hilton-hotel-policies/",
+    "checked_on": "2026-09-15",
+    "summary": "Exemplos reais de temas: achados e perdidos, recebimento de encomendas, fumo, idade de cadastro e taxas que variam por unidade. Nao adotamos valores ou condicoes de uma unidade como regra universal."
+  },
+  {
+    "id": "REF-02",
+    "title": "7Pines Resort Ibiza / Hyatt - Hotel policies",
+    "url": "https://www.hyatt.com/destination-by-hyatt/en-US/ibzdh-7-pines-resort-ibiza/policies",
+    "checked_on": "2026-09-15",
+    "summary": "Exemplos reais de regras especificas para pets e piscinas por faixa etaria. Idades, pesos, taxas e condicoes do Aurora sao propostas proprias; nao correspondem aos parametros deste resort."
+  },
+  {
+    "id": "REF-03",
+    "title": "Hana-Maui Resort / Hyatt - FAQs",
+    "url": "https://www.hyatt.com/destination-by-hyatt/en-US/oggal-hana-maui-resort/faqs",
+    "checked_on": "2026-09-15",
+    "summary": "A FAQ trata de horarios de entrada e saida, disponibilidade para antecipacao ou extensao e condicoes de estadia. Os horarios do Aurora permanecem parametros ficticios do piloto."
+  },
+  {
+    "id": "REF-04",
+    "title": "Iberostar - Perguntas frequentes",
+    "url": "https://www.iberostar.com/pt/faq/",
+    "checked_on": "2026-09-15",
+    "summary": "Exemplos de assuntos operacionais: ocupacao maxima, pre-check-in, preferencias de quarto, recreacao infantil, beneficios e sustentabilidade. Nao copiamos marcas de programas nem prometemos beneficios dessas redes."
+  },
+  {
+    "id": "REF-05",
+    "title": "Ministerio do Turismo - Portaria MTur 41/2025",
+    "url": "https://www.gov.br/turismo/pt-br/publicacoes/atos-normativos-2/2025/portaria-mtur-no-41-de-14-de-novembro-de-2025",
+    "checked_on": "2026-09-15",
+    "summary": "Referencia brasileira para registro de hospedes e FNRH Digital. A recepcao real deve validar documentos, autorizacoes e exigencias vigentes; o piloto nao transmite cadastro a plataforma oficial."
+  },
+  {
+    "id": "REF-06",
+    "title": "Hilton - Payment for reservations",
+    "url": "https://www.hilton.com/en/help-center/reservations/payment-for-hilton-reservations/",
+    "checked_on": "2026-09-15",
+    "summary": "Referencia de temas ligados a pagamento e reservas com deposito. Metodos, valores de garantia e prazos do Aurora dependem de definicao propria; nenhum prazo bancario e adotado dessa pagina."
+  }
+]

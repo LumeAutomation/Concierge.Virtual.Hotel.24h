@@ -1,5 +1,10 @@
 """AURA: piloto local deterministico. Somente dados ficticios."""
 import json
+import knowledge_engine
+import conversation_state
+import reception
+import policy_review
+import operations
 import os
 import re
 import sqlite3
@@ -38,6 +43,11 @@ def init_db():
             CHECK(status IN ('open','in_progress','resolved')));
         """)
 
+    conversation_state.init_schema(connection)
+    reception.init_schema(connection)
+    policy_review.init_schema(connection)
+    knowledge_engine.REVIEW_CONNECTION = connection
+
 # Somente perguntas informativas estreitas; demais pedidos vao para a fila.
 FAQ = [
     (r"check.?in|check.?out", "POL-04", "Check-in a partir das 15h; check-out até 12h. Early check-in e late check-out dependem de confirmação da recepção e podem envolver cobrança."),
@@ -66,6 +76,9 @@ def classify(message):
         matches = [row for row in FAQ if re.search(row[0], t)]
         if len(matches) == 1 and re.search(allowed, t) and len(t) <= 180 and (re.search(r"horario|que horas|quando.*(?:abre|fecha)|como.*(?:acess|conect)|nome da rede|^wi.?fi[?!. ]*$", t)):
             _, pid, reply = matches[0]
+            current, _ = knowledge_engine.load_base()
+            if current[pid].get("real_hotel_approval") == "aprovada_localmente":
+                reply = current[pid]["content"]
             return {"route": "AUTO_REPLY", "reply": reply, "policy_ids": [pid]}
     department = "recepcao"
     if re.search(r"toalha|limpeza|limpar|arrumar", t):
@@ -80,7 +93,7 @@ def classify(message):
             "reply": "Preciso de confirmação da equipe para atender esse pedido. Não há reserva, cobrança ou serviço confirmado.",
             "policy_ids": ["POL-38"]}
 
-def handle_message(body):
+def validate_message(body):
     if not isinstance(body, dict):
         raise ValueError("Envie um objeto JSON.")
     message, request_id = body.get("message"), body.get("request_id")
@@ -91,7 +104,48 @@ def handle_message(body):
         raise ValueError("request_id inválido: use protocolo local ou identificador wamid da Meta.")
     if not isinstance(session_id, str) or not re.fullmatch(r"[a-zA-Z0-9_-]{1,80}", session_id):
         raise ValueError("session_id inválido.")
-    result = classify(message)
+    return message, request_id, session_id
+
+def use_knowledge_ai(message):
+    t = normalize(message)
+    return not (re.search(EMERGENCY, t) or re.search(SENSITIVE, t) or re.search(ACTION, t) or t.strip(" !?.") in ("oi", "ola", "bom dia", "boa tarde", "boa noite"))
+
+def knowledge_context(body):
+    message, request_id, session_id = validate_message(body)
+    with connection() as db:
+        previous = db.execute("SELECT session_id,message FROM interactions WHERE id=?", (request_id,)).fetchone()
+    stored = "[conteúdo sensível omitido]" if re.search(SENSITIVE, normalize(message)) else message.strip()
+    if previous:
+        if previous[0] != session_id or previous[1] != stored:
+            raise ValueError("Protocolo ja utilizado por outra mensagem.")
+        result = knowledge_engine.build_context(message, request_id, session_id, False)
+        result["cached_response"] = True
+        return result
+    enabled = use_knowledge_ai(message)
+    history = conversation_state.snapshot(connection, request_id, session_id, message,
+        lambda text: bool(re.search(SENSITIVE, normalize(text)))) if enabled else []
+    enabled = enabled and not (conversation_state.is_followup(message) and not history)
+    return knowledge_engine.build_context(message, request_id, session_id, enabled, history)
+
+def handle_knowledge_message(body):
+    message, _, _ = validate_message(body)
+    decision = None
+    if use_knowledge_ai(message):
+        decision = knowledge_engine.validated_answer(body.get("model_output"), body.get("knowledge_version"), message)
+    if decision is None:
+        decision = classify(message)
+        decision["answer_mode"] = "local_fallback"
+        decision["ai_used"] = False
+    return handle_message(body, _decision=decision)
+
+def handle_message(body, _decision=None):
+    message, request_id, session_id = validate_message(body)
+    result = _decision if _decision is not None else classify(message)
+    if _decision is None and use_knowledge_ai(message) and conversation_state.is_followup(message):
+        history = conversation_state.snapshot(connection, request_id, session_id, message,
+            lambda text: bool(re.search(SENSITIVE, normalize(text))))
+        if not history:
+            result = {"route":"AUTO_REPLY", "reply":"Sobre qual servico do hotel voce esta perguntando?", "policy_ids":[], "answer_mode":"clarification"}
     # Nao reter conteudo identificado como sensivel.
     stored_message = "[conteúdo sensível omitido]" if re.search(SENSITIVE, normalize(message)) else message.strip()
     with connection() as db:
@@ -104,8 +158,8 @@ def handle_message(body):
         result.update({"request_id": request_id, "mode": "local_demo", "persisted": True})
         if result["route"] == "HUMAN_HANDOFF":
             result["handoff_id"] = request_id
-            result["reply"] += " Protocolo " + request_id + ": registrado na fila local, sem notificação externa."
-        result["sources"] = [{"id": pid, "title": POLICIES[pid]["title"]} for pid in result["policy_ids"]]
+            result["reply"] += " Protocolo " + request_id + ": registrado na fila local, aguardando atendimento da recepção."
+        result["sources"] = result.get("sources") or [{"id": pid, "title": knowledge_engine.load_base()[0][pid]["title"]} for pid in result["policy_ids"]]
         db.execute("INSERT INTO interactions VALUES (?,?,?,?,?)", (
             request_id, session_id, stored_message, json.dumps(result, ensure_ascii=False),
             datetime.now(timezone.utc).isoformat()))
@@ -115,12 +169,7 @@ def handle_message(body):
     return result
 
 def list_handoffs():
-    with connection() as db:
-        db.row_factory = sqlite3.Row
-        return [dict(r) for r in db.execute("""
-          SELECT h.*,i.message,i.created_at FROM handoffs h JOIN interactions i ON h.id=i.id
-          ORDER BY CASE h.priority WHEN 'urgent' THEN 0 ELSE 1 END, i.created_at DESC LIMIT 200
-        """)]
+    return reception.list_rows(connection)
 
 class Handler(BaseHTTPRequestHandler):
     def log_message(self, *_):
@@ -147,10 +196,16 @@ class Handler(BaseHTTPRequestHandler):
             return self.respond(403, {"error": "Acesso somente local."})
         if self.path == "/api/health":
             return self.respond(200, {"status": "ok", "mode": "local_demo", "ai": False, "whatsapp": False, "storage": "sqlite"})
+        if self.path == "/api/whatsapp/deliveries":
+            return self.respond(200, conversation_state.list_deliveries(connection))
+        if self.path == "/api/operations":
+            return self.respond(200, operations.snapshot())
+        if self.path == "/api/policies":
+            return self.respond(200, policy_review.catalog(connection, POLICIES))
         if self.path == "/api/handoffs":
             return self.respond(200, list_handoffs())
-        if self.path in ("/", "/recepcao"):
-            payload = (ROOT / "web/index.html").read_bytes()
+        if self.path in ("/", "/recepcao", "/politicas", "/operacao"):
+            payload = (ROOT / ("web/operations.html" if self.path == "/operacao" else "web/policies.html" if self.path == "/politicas" else "web/index.html")).read_bytes()
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.send_header("Content-Length", str(len(payload)))
@@ -169,16 +224,29 @@ class Handler(BaseHTTPRequestHandler):
             if not 0 < size <= 16384:
                 return self.respond(413, {"error": "Tamanho inválido."})
             body = json.loads(self.rfile.read(size))
+            if self.path == "/api/policies":
+                try:
+                    return self.respond(200, policy_review.change(connection, POLICIES, body))
+                except policy_review.Conflict as error:
+                    return self.respond(409, {"error": str(error)})
+                except ValueError as error:
+                    return self.respond(400, {"error": str(error)})
+            if self.path == "/api/whatsapp/reply":
+                if not isinstance(body, dict): raise ValueError("Corpo invalido.")
+                result = conversation_state.deliver(connection, body.get("request_id"), body.get("session_id"))
+                return self.respond(503 if result["needs_review"] else 200, result)
+            if self.path == "/api/knowledge/context":
+                return self.respond(200, knowledge_context(body))
+            if self.path == "/api/chat/knowledge":
+                return self.respond(200, handle_knowledge_message(body))
             if self.path == "/api/chat":
                 return self.respond(200, handle_message(body))
             if self.path == "/api/handoffs/status":
-                if not isinstance(body, dict) or body.get("status") not in ("open", "in_progress", "resolved"):
-                    raise ValueError("Status inválido.")
-                if not isinstance(body.get("id"), str):
-                    raise ValueError("Protocolo inválido.")
-                with connection() as db:
-                    count = db.execute("UPDATE handoffs SET status=? WHERE id=?", (body["status"], body["id"])).rowcount
-                return self.respond(200 if count else 404, {"updated": bool(count)})
+                try:
+                    result = reception.update(connection, body)
+                except ValueError as error:
+                    return self.respond(400, {"error": str(error)})
+                return self.respond(200 if result['updated'] else 404, result)
             return self.respond(404, {"error": "Não encontrado."})
         except (ValueError, UnicodeError):
             return self.respond(400, {"error": "Dados inválidos ou protocolo já utilizado."})

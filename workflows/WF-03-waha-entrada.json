@@ -1,0 +1,310 @@
+{
+  "id": "auraWahaInput03",
+  "name": "WF-03 | AURA - Base do hotel e WhatsApp",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "aura-waha-entrada",
+        "authentication": "headerAuth",
+        "responseMode": "lastNode",
+        "responseData": "allEntries",
+        "options": {}
+      },
+      "id": "waha-webhook",
+      "name": "WAHA - entrada",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "aura-waha-entrada"
+    },
+    {
+      "parameters": {
+        "jsCode": "const output = [];\nfor (const [index, item] of $input.all().entries()) {\n  const event = item.json.body ?? item.json;\n  const p = event.payload;\n  if (event.event !== 'message' || event.session !== 'default' || !p) continue;\n  if (p.fromMe !== false || typeof p.from !== 'string') continue;\n  if (!/^\\d{6,20}@(c\\.us|lid)$/.test(p.from)) continue;\n  if (p.hasMedia || typeof p.body !== 'string' || !p.body.startsWith('[AURA TESTE] ')) continue;\n  const message = p.body.slice('[AURA TESTE] '.length).trim();\n  if (!message || message.length > 2000) throw new Error('Texto de teste vazio ou acima de 2000 caracteres.');\n  if (typeof p.id !== 'string' || !p.id.trim() || p.id.length > 512) throw new Error('ID de mensagem WAHA invalido.');\n  output.push({json: {\n    message,\n    chat_id: p.from,\n    request_id: JSON.stringify(['waha', event.session, p.from, p.id]),\n    session_id: 'waha_' + p.from.replace(/[^a-zA-Z0-9_-]/g, '_'),\n  }, pairedItem: {item: index}});\n}\nreturn output;\n"
+      },
+      "id": "waha-normalize",
+      "name": "Filtrar teste e preparar",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "action": "hash",
+        "type": "SHA256",
+        "value": "={{ $json.request_id }}",
+        "dataPropertyName": "request_id",
+        "encoding": "hex"
+      },
+      "id": "waha-hash",
+      "name": "Identificador SHA256",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 2,
+      "position": [
+        520,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8787/api/chat",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({message: $json.message, request_id: $json.request_id, session_id: $json.session_id}) }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "waha-aura",
+      "name": "AURA - processar",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1300,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const original = $('Filtrar teste e preparar').item.json;\nconst result = $json;\nif (result.persisted !== true || typeof result.reply !== 'string' || !result.reply.trim()) {\n  throw new Error('AURA nao confirmou uma resposta persistida; envio cancelado.');\n}\nif (typeof original.chat_id !== 'string' || !/^\\d{6,20}@(c\\.us|lid)$/.test(original.chat_id)) {\n  throw new Error('Destino de resposta invalido; envio cancelado.');\n}\nif (result.session_id && result.session_id !== original.session_id) throw new Error('Sessao de resposta divergente.');\nif (typeof result.request_id !== 'string' || !result.request_id) throw new Error('Protocolo ausente.');\nreturn {json: {request_id: result.request_id, session_id: original.session_id}};\n"
+      },
+      "id": "waha-reply",
+      "name": "Preparar resposta WhatsApp",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1820,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8787/api/whatsapp/reply",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "waha-send",
+      "name": "WAHA - enviar resposta",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2080,
+        0
+      ],
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8787/api/knowledge/context",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({message: $json.message, request_id: $json.request_id, session_id: $json.session_id}) }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "aura-knowledge",
+      "name": "Carregar base do hotel",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        780,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.use_ai }}",
+              "operation": "equal",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "aura-ai-condition",
+      "name": "Consultar IA?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.model_request) }}",
+        "options": {
+          "timeout": 25000
+        }
+      },
+      "id": "aura-openai",
+      "name": "IA - consultar politicas",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1300,
+        -160
+      ],
+      "onError": "continueRegularOutput",
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8787/api/chat/knowledge",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({message: $('Carregar base do hotel').item.json.message, request_id: $('Carregar base do hotel').item.json.request_id, session_id: $('Carregar base do hotel').item.json.session_id, knowledge_version: $('Carregar base do hotel').item.json.knowledge_version, model_output: $json}) }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "aura-knowledge-save",
+      "name": "Validar fonte e registrar",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1560,
+        -160
+      ]
+    }
+  ],
+  "connections": {
+    "WAHA - entrada": {
+      "main": [
+        [
+          {
+            "node": "Filtrar teste e preparar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar teste e preparar": {
+      "main": [
+        [
+          {
+            "node": "Identificador SHA256",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Identificador SHA256": {
+      "main": [
+        [
+          {
+            "node": "Carregar base do hotel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AURA - processar": {
+      "main": [
+        [
+          {
+            "node": "Preparar resposta WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar resposta WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "WAHA - enviar resposta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Carregar base do hotel": {
+      "main": [
+        [
+          {
+            "node": "Consultar IA?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar IA?": {
+      "main": [
+        [
+          {
+            "node": "IA - consultar politicas",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AURA - processar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IA - consultar politicas": {
+      "main": [
+        [
+          {
+            "node": "Validar fonte e registrar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar fonte e registrar": {
+      "main": [
+        [
+          {
+            "node": "Preparar resposta WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "none",
+    "saveManualExecutions": false
+  }
+}

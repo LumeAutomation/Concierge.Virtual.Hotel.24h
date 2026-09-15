@@ -1,34 +1,46 @@
-﻿# Retomada — 11/09/2026
+﻿# Retomada do projeto - 15/09/2026
 
-## Concluído e verificado
+## Implementado
 
-- Recuperado o escopo da conversa interrompida: piloto AURA local, banco e ponte n8n.
-- Chat e fila de recepção em http://127.0.0.1:8787 e /recepcao.
-- SQLite em runtime/aura.sqlite3 com protocolos idempotentes e status persistidos.
-- 10 testes passaram: fontes de FAQ, emergência, reserva, pergunta desconhecida, conteúdo sensível, concorrência, conflito de protocolo, falha de armazenamento, entrada inválida e persistência.
-- Teste Playwright passou no servidor real: clique em pergunta, envio, resposta com fonte, pedido fictício, navegação para recepção, alteração de status, recarga e confirmação. Atendimento QA encerrado como resolvido.
-- Viewport móvel 390x844 sem overflow horizontal; nenhum erro JavaScript observado.
-- Evidências locais: runtime/browser-check.json, chat.png, recepcao.png e mobile.png.
-- POST inválido devolveu 400; origem externa devolveu 403.
+- WAHA e n8n: entrada [AURA TESTE] e resposta no WhatsApp.
+- IA com citacoes verificadas, respostas curtas e contexto por conversa.
+- Controle de duplicidade e tratamento de entrega incerta.
+- Recepcao: assumir, concluir e avisar pelo WhatsApp.
+- 100 politicas demonstrativas, rascunhos e aprovacao local.
+- Supervisor no login Windows, recuperacao, backup diario e painel de saude.
 
-## Preparado, ainda não executado
+## Acessos locais
 
-- database/001_schema.sql: 11 tabelas PostgreSQL, relações e RLS sem acesso público.
-- database/002_seed.sql: hotel fictício e 39 políticas existentes.
-- workflows/WF-01-aura-local.json: workflow desativado, com Header Auth a configurar. Importação e execução no n8n ainda não verificadas.
+Recepcao: http://localhost:8787/recepcao
+Politicas: http://localhost:8787/politicas
+Operacao: http://localhost:8787/operacao
+n8n: http://localhost:5678/workflow/auraWahaInput03
+WAHA: http://localhost:3000/dashboard/
 
-## Próximo bloco
+## Verificacoes
 
-Conectar o n8n ao piloto conforme docs/n8n.md e testar a ponte ponta a ponta. Confirmar infraestrutura PostgreSQL/Supabase e disponibilidade de conta/provedor de IA e WhatsApp antes das integrações correspondentes. Não há chaves configuradas pelo piloto.
+38 testes Python passaram. Recepcao, politicas e operacao foram conferidas em
+navegador real. O supervisor recuperou a AURA apos interrupcao controlada.
+Backup SQLite criado, restaurado em ambiente de teste e verificado.
 
-O prompt em prompts/aura-system.txt está preservado para a futura IA. A aplicação atual usa regras em português, não IA ou RAG, e não envia notificações externas.
+## Proximo trabalho
 
-## Reiniciar
+1. Login individual e permissoes por funcao.
+2. Revisao das politicas pela equipe do hotel: a base ainda e demonstrativa.
+3. Testar inicio depois de novo login Windows, sem reiniciar a maquina agora.
+4. Piloto restrito a numeros autorizados antes de remover [AURA TESTE].
+5. Hospedagem continua e backup externo para operacao real.
 
-Na pasta do projeto: python app.py. O servidor pode estar em segundo plano; conferir /api/health antes de iniciar outro. AURA_PORT e AURA_DB permitem escolher porta e arquivo de dados.
+## Versionamento e dados locais
 
-As alterações estão locais, sem commit ou push nesta retomada. As anotações de acesso estão ignoradas pelo Git.
+O Git recebe codigo, telas, scripts, testes, documentacao, politicas
+demonstrativas e templates de workflow sem credenciais.
+Runtime, .env, conversas, banco e exportacoes autenticadas ficam fora do Git.
+O backup local em %LOCALAPPDATA%\AURA\backups preserva banco, atendimentos,
+rascunhos, politicas aprovadas e controle dos envios.
+Credenciais do n8n, arquivos .env e sessao WAHA continuam nos locais originais;
+nao fazem parte do backup da AURA e exigem migracao separada.
+Clonar o repositorio nao recria automaticamente as credenciais.
 
-## Entrada WhatsApp preparada
-
-WF-02-whatsapp-entrada.json recebe mensagens via WhatsApp Trigger, filtra status e normaliza eventos para a API local. Ainda requer importacao, credencial e URL HTTPS publica do n8n; nao houve teste real Meta -> n8n. Nao envia respostas ao celular. Veja docs/whatsapp-entrada.md. Validacao: 11 testes Python e 10 verificacoes Node passaram. O bloqueio Meta 130497 de saida permanece pendente apos configurar BRL.
+Procedimentos: docs/operations.md, docs/policy-review.md, docs/reception.md,
+docs/knowledge-integration.md e docs/waha-n8n.md.
