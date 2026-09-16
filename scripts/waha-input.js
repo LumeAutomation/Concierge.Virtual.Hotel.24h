@@ -5,8 +5,8 @@ for (const [index, item] of $input.all().entries()) {
   if (event.event !== 'message' || event.session !== 'default' || !p) continue;
   if (p.fromMe !== false || typeof p.from !== 'string') continue;
   if (!/^\d{6,20}@(c\.us|lid)$/.test(p.from)) continue;
-  if (p.hasMedia || typeof p.body !== 'string' || !p.body.startsWith('[AURA TESTE] ')) continue;
-  const message = p.body.slice('[AURA TESTE] '.length).trim();
+  if (p.hasMedia || typeof p.body !== 'string') continue;
+  const message = p.body.replace(/^\[AURA TESTE\]\s*/i, '').trim();
   if (!message || message.length > 2000) throw new Error('Texto de teste vazio ou acima de 2000 caracteres.');
   if (typeof p.id !== 'string' || !p.id.trim() || p.id.length > 512) throw new Error('ID de mensagem WAHA invalido.');
   output.push({json: {

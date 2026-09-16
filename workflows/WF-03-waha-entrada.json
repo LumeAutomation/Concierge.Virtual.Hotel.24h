@@ -1,6 +1,6 @@
 {
   "id": "auraWahaInput03",
-  "name": "WF-03 | AURA - Base do hotel e WhatsApp",
+  "name": "WF-03 | WAHA - AURA | Conversa de teste",
   "active": false,
   "nodes": [
     {
@@ -24,7 +24,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const output = [];\nfor (const [index, item] of $input.all().entries()) {\n  const event = item.json.body ?? item.json;\n  const p = event.payload;\n  if (event.event !== 'message' || event.session !== 'default' || !p) continue;\n  if (p.fromMe !== false || typeof p.from !== 'string') continue;\n  if (!/^\\d{6,20}@(c\\.us|lid)$/.test(p.from)) continue;\n  if (p.hasMedia || typeof p.body !== 'string' || !p.body.startsWith('[AURA TESTE] ')) continue;\n  const message = p.body.slice('[AURA TESTE] '.length).trim();\n  if (!message || message.length > 2000) throw new Error('Texto de teste vazio ou acima de 2000 caracteres.');\n  if (typeof p.id !== 'string' || !p.id.trim() || p.id.length > 512) throw new Error('ID de mensagem WAHA invalido.');\n  output.push({json: {\n    message,\n    chat_id: p.from,\n    request_id: JSON.stringify(['waha', event.session, p.from, p.id]),\n    session_id: 'waha_' + p.from.replace(/[^a-zA-Z0-9_-]/g, '_'),\n  }, pairedItem: {item: index}});\n}\nreturn output;\n"
+        "jsCode": "const output = [];\nfor (const [index, item] of $input.all().entries()) {\n  const event = item.json.body ?? item.json;\n  const p = event.payload;\n  if (event.event !== 'message' || event.session !== 'default' || !p) continue;\n  if (p.fromMe !== false || typeof p.from !== 'string') continue;\n  if (!/^\\d{6,20}@(c\\.us|lid)$/.test(p.from)) continue;\n  if (p.hasMedia || typeof p.body !== 'string') continue;\n  const message = p.body.replace(/^\\[AURA TESTE\\]\\s*/i, '').trim();\n  if (!message || message.length > 2000) throw new Error('Texto de teste vazio ou acima de 2000 caracteres.');\n  if (typeof p.id !== 'string' || !p.id.trim() || p.id.length > 512) throw new Error('ID de mensagem WAHA invalido.');\n  output.push({json: {\n    message,\n    chat_id: p.from,\n    request_id: JSON.stringify(['waha', event.session, p.from, p.id]),\n    session_id: 'waha_' + p.from.replace(/[^a-zA-Z0-9_-]/g, '_'),\n  }, pairedItem: {item: index}});\n}\nreturn output;\n"
       },
       "id": "waha-normalize",
       "name": "Filtrar teste e preparar",
@@ -61,16 +61,24 @@
         "jsonBody": "={{ JSON.stringify({message: $json.message, request_id: $json.request_id, session_id: $json.session_id}) }}",
         "options": {
           "timeout": 15000
-        }
+        },
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
       },
       "id": "waha-aura",
       "name": "AURA - processar",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1300,
-        180
-      ]
+        780,
+        0
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "auraLocalService",
+          "name": "AURA - servico local"
+        }
+      }
     },
     {
       "parameters": {
@@ -82,7 +90,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1820,
+        1040,
         0
       ]
     },
@@ -95,101 +103,73 @@
         "jsonBody": "={{ JSON.stringify($json) }}",
         "options": {
           "timeout": 30000
-        }
+        },
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
       },
       "id": "waha-send",
       "name": "WAHA - enviar resposta",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2080,
+        1300,
         0
       ],
-      "retryOnFail": false
+      "retryOnFail": false,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "auraLocalService",
+          "name": "AURA - servico local"
+        }
+      }
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "http://127.0.0.1:8787/api/knowledge/context",
+        "url": "http://127.0.0.1:8787/api/pilot/check",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({message: $json.message, request_id: $json.request_id, session_id: $json.session_id}) }}",
+        "jsonBody": "={{ JSON.stringify($json) }}",
         "options": {
           "timeout": 15000
-        }
+        },
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
       },
-      "id": "aura-knowledge",
-      "name": "Carregar base do hotel",
+      "id": "aura-pilot-check",
+      "name": "Verificar contato autorizado",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        780,
-        0
-      ]
+        650,
+        -250
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "auraLocalService",
+          "name": "AURA - servico local"
+        }
+      }
     },
     {
       "parameters": {
         "conditions": {
           "boolean": [
             {
-              "value1": "={{ $json.use_ai }}",
+              "value1": "={{ $json.allowed }}",
               "operation": "equal",
               "value2": true
             }
           ]
         }
       },
-      "id": "aura-ai-condition",
-      "name": "Consultar IA?",
+      "id": "aura-pilot-condition",
+      "name": "Contato autorizado?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        1040,
-        0
-      ]
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://api.openai.com/v1/chat/completions",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "openAiApi",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify($json.model_request) }}",
-        "options": {
-          "timeout": 25000
-        }
-      },
-      "id": "aura-openai",
-      "name": "IA - consultar politicas",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        1300,
-        -160
-      ],
-      "onError": "continueRegularOutput",
-      "retryOnFail": false
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "http://127.0.0.1:8787/api/chat/knowledge",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({message: $('Carregar base do hotel').item.json.message, request_id: $('Carregar base do hotel').item.json.request_id, session_id: $('Carregar base do hotel').item.json.session_id, knowledge_version: $('Carregar base do hotel').item.json.knowledge_version, model_output: $json}) }}",
-        "options": {
-          "timeout": 15000
-        }
-      },
-      "id": "aura-knowledge-save",
-      "name": "Validar fonte e registrar",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        1560,
-        -160
+        900,
+        -250
       ]
     }
   ],
@@ -220,7 +200,7 @@
       "main": [
         [
           {
-            "node": "Carregar base do hotel",
+            "node": "Verificar contato autorizado",
             "type": "main",
             "index": 0
           }
@@ -249,55 +229,27 @@
         ]
       ]
     },
-    "Carregar base do hotel": {
+    "Verificar contato autorizado": {
       "main": [
         [
           {
-            "node": "Consultar IA?",
+            "node": "Contato autorizado?",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Consultar IA?": {
+    "Contato autorizado?": {
       "main": [
-        [
-          {
-            "node": "IA - consultar politicas",
-            "type": "main",
-            "index": 0
-          }
-        ],
         [
           {
             "node": "AURA - processar",
             "type": "main",
             "index": 0
           }
-        ]
-      ]
-    },
-    "IA - consultar politicas": {
-      "main": [
-        [
-          {
-            "node": "Validar fonte e registrar",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Validar fonte e registrar": {
-      "main": [
-        [
-          {
-            "node": "Preparar resposta WhatsApp",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        ],
+        []
       ]
     }
   },

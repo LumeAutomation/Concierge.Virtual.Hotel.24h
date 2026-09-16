@@ -69,3 +69,19 @@ def validated_answer(model_output,version,question=""):
         return {'route':'AUTO_REPLY','reply':reply,'policy_ids':ids,'sources':[{'id':pid,'title':policies[pid]['title']} for pid in ids], 'answer_mode':'knowledge_extract','knowledge_version':current,'ai_used':True}
     except (KeyError,IndexError,TypeError,ValueError):
         return None
+
+
+def question_key(text):
+    text=''.join(c for c in unicodedata.normalize('NFKD',text.lower()) if not unicodedata.combining(c))
+    return ' '.join(re.findall(r'[a-z0-9]+',text))
+
+
+def local_answer(question):
+    policies,version=load_base();key=question_key(question)
+    candidates=[pid for pid,p in policies.items() if pid!='POL-00' and p.get('audience')=='guest' and
+                key in (question_key(p.get('example_question','')),question_key(p['title']))]
+    if len(candidates)!=1:return None
+    pid=candidates[0];p=policies[pid]
+    return {'route':'AUTO_REPLY','reply':p['content'],'policy_ids':[pid],
+            'sources':[{'id':pid,'title':p['title']}],'answer_mode':'local_knowledge',
+            'knowledge_version':version,'ai_used':False}

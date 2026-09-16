@@ -1,3 +1,26 @@
+# Atualização do modelo — 16/09/2026
+
+Texto normal de contatos autorizados é aceito sem prefixo. O WF-03 publicado
+consulta somente a base local e não contém nós OpenAI. A primeira interação de
+cada conversa recebe POL-00; respostas e boas-vindas são persistidas juntas para
+não repetir em reentregas. A criação/publicação de políticas ocorre pela tela.
+
+As seções seguintes são histórico das versões anteriores, não o fluxo atual.
+
+---
+
+# Estado atual — 16/09/2026
+
+O WF-03 agora verifica contatos autorizados antes de consultar a IA. As chamadas
+à AURA usam a credencial `AURA - servico local`; o envio passa pelo controle de
+idempotência da AURA. Prefixo `[AURA TESTE] ` mantido. Lista vazia bloqueia entradas.
+Configuração e reinstalação: [access.md](access.md).
+
+As seções abaixo registram etapas anteriores, inclusive o envio direto que foi
+substituído. Para o estado atual, consulte também [retomada.md](retomada.md).
+
+---
+
 # WAHA -> n8n -> AURA -> WhatsApp
 
 Workflow: workflows/WF-03-waha-entrada.json.

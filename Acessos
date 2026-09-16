@@ -9,3 +9,9 @@ Resetar Senha >>>> n8n user-management:reset
 n8n user-management:reset
 n8n start --tunnel
 http://localhost:5678
+
+http://localhost:3000/dashboard/  waha
+Senha : 76654272dacb4b788e79ba1ecf3d194c
+Login : admin
+http://localhost:8787/politicas    Politicas
+http://localhost:5678/    n8n

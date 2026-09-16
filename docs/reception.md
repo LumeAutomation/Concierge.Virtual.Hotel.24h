@@ -1,4 +1,4 @@
-﻿# Recepcao: assumir, concluir e avisar
+# Recepcao: assumir, concluir e avisar
 
 Abra http://localhost:8787/recepcao e informe seu nome. Clique em **Assumir
 atendimento** no pedido e, depois de conferir que ele foi atendido, em
@@ -8,7 +8,7 @@ atendimento** no pedido e, depois de conferir que ele foi atendido, em
 O aviso informa que a recepcao marcou aquele protocolo como concluido.
 Ele nao confirma automaticamente entrega de itens, reservas ou cobrancas.
 Apenas a conclusao feita pelo operador dispara o aviso; assumir nao envia.
-O piloto continua limitado a dados de teste e ao prefixo [AURA TESTE].
+O modelo usa dados demonstrativos e contatos autorizados, sem prefixo obrigatório.
 
 ## Registro e envio
 

@@ -1,4 +1,4 @@
-﻿import unittest
+import unittest
 import json
 import concurrent.futures
 import test_app
@@ -54,4 +54,4 @@ class PolicyReviewTests(unittest.TestCase):
         body.update(id='POL-02');review.change(app.connection,app.POLICIES,body)
         review.change(app.connection,app.POLICIES,{**body,'action':'approve','revision':1})
         self.assertNotIn('POL-02',kb.guest_ids(kb.load_base()[0]))
-        self.assertEqual(len(review.catalog(app.connection,app.POLICIES)),100)
+        self.assertEqual(len(review.catalog(app.connection,app.POLICIES)),101)

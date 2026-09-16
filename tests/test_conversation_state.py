@@ -1,4 +1,4 @@
-﻿import concurrent.futures
+import concurrent.futures
 import json
 import tempfile
 import unittest
@@ -68,18 +68,13 @@ class ConversationTests(unittest.TestCase):
         self.assertTrue(state.deliver(app.connection,'context-0001',self.session,transport)['needs_review'])
         transport.assert_not_called()
 
-    def test_context_is_bounded_isolated_and_snapshot_stable(self):
-        for i in range(5): app.handle_message(self.body(rid=f'context-00{i+1:02}'))
-        body=self.body('e aos domingos?','followup-0001')
-        first=app.knowledge_context(body)
-        self.assertEqual(first['context_turns'],3)
-        self.assertEqual(len(first['model_request']['messages']),8)
-        self.assertNotIn(self.session,json.dumps(first['model_request']))
-        app.handle_message(self.body('Quero toalhas','handoff-0001'))
-        self.assertEqual(first,app.knowledge_context(body))
-        self.assertEqual(app.knowledge_context(self.body('e aos domingos?','followup-0002'))['context_turns'],0)
-        self.assertEqual(app.knowledge_context(self.body('e aos domingos?','followup-0003','other-chat'))['context_turns'],0)
-        with self.assertRaises(ValueError): app.knowledge_context(self.body('e aos sabados?','followup-0001'))
+    def test_history_is_not_forwarded_in_local_only_mode(self):
+        for i in range(5):app.handle_message(self.body(rid=f'context-00{i+1:02}'))
+        for sid in [self.session,'other-chat']:
+            context=app.knowledge_context(self.body('e aos domingos?','followup-0001',sid))
+            self.assertFalse(context['use_ai'])
+            self.assertNotIn('model_request',context)
+            self.assertEqual(context['context_turns'],0)
 
     def test_expired_and_sensitive_history_not_forwarded(self):
         app.handle_message(self.body())

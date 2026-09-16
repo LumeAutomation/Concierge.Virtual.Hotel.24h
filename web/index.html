@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AURA · Concierge Aurora</title><style>
 :root{font-family:Segoe UI,Arial,sans-serif;color:#213b3b;background:#f3f3ed}*{box-sizing:border-box}body{margin:0}header{background:#123d3a;color:white;padding:25px 6vw;display:flex;align-items:center;justify-content:space-between}header b{font-size:28px;letter-spacing:5px}header small{display:block;color:#c5d5c7;margin-top:6px}nav a{color:#f1dfb8;margin-left:18px}main{max-width:1100px;margin:30px auto;padding:0 20px}.notice{padding:14px 18px;background:#eee2c8;border-radius:10px;font-size:14px}.layout{display:grid;grid-template-columns:1fr 300px;gap:22px;margin-top:24px}.panel{background:white;border:1px solid #dce3dc;border-radius:16px;padding:24px}h1{font-size:26px;margin:0 0 8px}h2{font-size:19px}p{line-height:1.6}#messages{height:370px;overflow:auto;padding:10px 0}.bubble{white-space:pre-wrap;padding:14px;border-radius:12px;background:#edf2ec;margin:12px 0;line-height:1.5}.user{background:#174b46;color:white;margin-left:35px}.source{display:block;font-size:12px;margin-top:10px;color:#536d60}form{display:flex;gap:8px}input{width:100%;padding:14px;border:1px solid #bac7be;border-radius:8px;font:inherit}button,select{font:inherit;padding:11px;border:1px solid #bdcbbd;border-radius:8px;cursor:pointer}button{background:#174b46;color:white}button:disabled{opacity:.5;cursor:wait}.example{display:block;width:100%;text-align:left;background:#f8f9f4;color:#23423b;margin:10px 0}.ticket{border:1px solid #dce3dc;border-left:5px solid #8ba99a;padding:16px;margin:14px 0;border-radius:8px}.urgent{border-left-color:#b62828;background:#fff5f2}.meta{color:#63746e;font-size:13px}#error{color:#9b2424}.hidden{display:none}@media(max-width:750px){.layout{grid-template-columns:1fr}header{padding:22px}#messages{height:330px}}
-header{flex-wrap:wrap;gap:16px}nav{display:flex;flex-wrap:wrap;gap:12px}nav a{margin-left:0}</style></head><body><header><div><b>AURA</b><small>Aurora Grand Resort & Spa</small></div><nav><a href="/">Concierge</a><a href="/recepcao">Recepção</a><a href="/politicas">Políticas</a><a href="/operacao">Operação</a></nav></header>
+header{flex-wrap:wrap;gap:16px}nav{display:flex;flex-wrap:wrap;gap:12px}nav a{margin-left:0}</style><script src="/staff.js" defer></script></head><body><header><div><b>AURA</b><small>Aurora Grand Resort & Spa</small></div><nav><a href="/">Concierge</a><a href="/recepcao">Recepção</a><a href="/politicas">Políticas</a><a href="/operacao">Operação</a></nav></header>
 <main><div class="notice">Piloto de demonstração ? Resort fictício ? Use apenas dados de teste. A recepção acompanha os pedidos recebidos pelo painel e pelo WhatsApp.</div>
 <section id="chat" class="layout"><div class="panel"><h1>Como podemos ajudar?</h1><p>Informações do resort e atendimento de demonstração, em português.</p><div id="messages" role="log" aria-live="polite"><div class="bubble">Olá! Sou a AURA. Consulte os horários do resort ou registre uma solicitação para a equipe de demonstração.</div></div>
 <form id="form"><input id="message" aria-label="Sua mensagem" placeholder="Escreva sua mensagem…" maxlength="2000" required autocomplete="off"><button id="send">Enviar</button></form></div>
@@ -18,10 +18,10 @@ $('#form').addEventListener('submit',async e=>{e.preventDefault();const message=
 document.querySelectorAll('.example').forEach(b=>b.onclick=()=>{$('#message').value=b.textContent;$('#message').focus()});
 
 let refreshing=false, acting=false;
-$('#operator').value=localStorage.auraOperator||'';
-$('#operator').oninput=()=>{localStorage.auraOperator=$('#operator').value};
+$('#operator').readOnly=true;
+
 const statusLabels={open:'Aberto',in_progress:'Em atendimento',resolved:'Concluído'};
-const deliveryLabels={not_requested:'Aviso será enviado ao concluir pedidos do WhatsApp.',sending:'Enviando aviso…',sent:'Aviso aceito pelo WhatsApp.',unknown:'Envio não confirmado. Confira a conversa antes de agir; não haverá reenvio automático.',local_only:'Pedido do painel local: sem aviso pelo WhatsApp.'};
+const deliveryLabels={not_requested:'Aviso será enviado ao concluir pedidos do WhatsApp.',sending:'Enviando aviso…',sent:'Aviso aceito pelo WhatsApp.',blocked:'Contato fora do piloto: aviso não enviado.',unknown:'Envio não confirmado. Confira a conversa antes de agir; não haverá reenvio automático.',local_only:'Pedido do painel local: sem aviso pelo WhatsApp.'};
 async function refresh(){
  if(refreshing||acting)return;refreshing=true;
  try{
@@ -52,5 +52,5 @@ async function refresh(){
  }catch(e){$('#error').textContent='Falha ao atualizar a fila: '+e.message}
  finally{refreshing=false}
 }
-if(reception){refresh();setInterval(refresh,5000)}
+if(reception){window.addEventListener('DOMContentLoaded',async()=>{await window.auraStaff;refresh();setInterval(refresh,5000)})}
 </script></body></html>

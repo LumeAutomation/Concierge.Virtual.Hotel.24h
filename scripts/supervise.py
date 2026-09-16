@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import socket
 import subprocess
+import psutil
 import sys
 import time
 from datetime import datetime
@@ -21,6 +22,16 @@ NODE=Path(os.environ['ProgramFiles'])/'nodejs/node.exe'
 DOCKER_DIR=Path(os.environ['LOCALAPPDATA'])/'Programs/DockerDesktop'
 if not DOCKER_DIR.exists():DOCKER_DIR=Path(os.environ['ProgramFiles'])/'Docker/Docker'
 DOCKER=DOCKER_DIR/'resources/bin/docker.exe'
+N8N_ENV = {
+    'DB_SQLITE_POOL_SIZE':'1',
+    'N8N_CONCURRENCY_PRODUCTION_LIMIT':'1',
+    'N8N_RUNNERS_MAX_CONCURRENCY':'1',
+    'N8N_RUNNERS_MAX_OLD_SPACE_SIZE':'256',
+    'N8N_RUNNERS_GRANT_TOKEN_TTL':'120',
+    'N8N_DIAGNOSTICS_ENABLED':'false',
+    'N8N_DISABLED_MODULES':'mcp-registry,community-packages',
+    'N8N_VERSION_NOTIFICATIONS_ENABLED':'false',
+}
 children={}
 last_attempt={}
 
@@ -38,10 +49,18 @@ def listening(port):
 def already_starting(name):
     child=children.get(name)
     if child is not None and child.poll() is None:return True
-    target=str(N8N) if name=='n8n' else 'app.py'
-    env={**os.environ,'AURA_PROCESS_TARGET':target,'AURA_PROCESS_NAME':'node.exe' if name=='n8n' else 'python.exe'}
-    code="Get-CimInstance Win32_Process | Where-Object { $_.Name -eq $env:AURA_PROCESS_NAME -and $_.CommandLine -and $_.CommandLine.IndexOf($env:AURA_PROCESS_TARGET,[StringComparison]::OrdinalIgnoreCase) -ge 0 } | ForEach-Object { 'found' }"
-    return b'found' in run(['powershell.exe','-NoProfile','-Command',code],env=env).stdout
+    target=str(N8N).casefold() if name=='n8n' else 'app.py'
+    expected='node.exe' if name=='n8n' else 'python.exe'
+    for process in psutil.process_iter(['name']):
+        if (process.info['name'] or '').lower()!=expected:continue
+        try:
+            command=process.cmdline()
+            if name=='n8n' and any(target==arg.casefold() for arg in command):return True
+            if name=='aura' and any(Path(arg).name.lower()=='app.py' for arg in command):return True
+        except psutil.NoSuchProcess:continue
+        # AccessDenied propagates: do not create a duplicate when ownership is unknown.
+    return False
+
 
 
 def start(name,port,args):
@@ -51,8 +70,11 @@ def start(name,port,args):
     log_dir=ops.LOCAL/'logs';log_dir.mkdir(parents=True,exist_ok=True)
     log=log_dir/(name+'.log')
     if log.exists() and log.stat().st_size>5_000_000:os.replace(log,log.with_suffix('.previous.log'))
+    environment={**os.environ,**N8N_ENV} if name=='n8n' else os.environ.copy()
+    if name=='n8n':
+        environment['N8N_DISABLED_MODULES']=','.join(sorted(set(filter(None,(os.environ.get('N8N_DISABLED_MODULES','')+',mcp-registry,community-packages').split(',')))))
     with log.open('ab') as output:
-        children[name]=subprocess.Popen([str(x) for x in args],cwd=ROOT,stdout=output,stderr=output,creationflags=subprocess.CREATE_NO_WINDOW)
+        children[name]=subprocess.Popen([str(x) for x in args],cwd=ops.LOCAL,env=environment,stdout=output,stderr=output,creationflags=subprocess.CREATE_NO_WINDOW)
 
 
 def ensure_waha():
@@ -73,7 +95,9 @@ def ensure_waha():
 def tick():
     errors=[]
     for name,action in [('aura',lambda:start('aura',8787,[PYTHON,ROOT/'app.py'])),('n8n',lambda:start('n8n',5678,[NODE,N8N,'start'])),('waha',ensure_waha)]:
-        try:action()
+        try:
+            ops.write_json(ops.STATE,{'heartbeat':ops.now().isoformat(),'errors':errors,'pid':os.getpid(),'checking':name})
+            action()
         except Exception as error:errors.append(name+':'+type(error).__name__)
     previous=ops.read_json(ops.BACKUP_STATE)
     try:due=(ops.now()-datetime.fromisoformat(previous['created_at'])).total_seconds()>=86400

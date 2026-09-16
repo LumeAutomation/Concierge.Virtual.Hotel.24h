@@ -1,4 +1,4 @@
-﻿"""Conclusao pela recepcao com uma tentativa de notificacao por protocolo."""
+"""Conclusao pela recepcao com uma tentativa de notificacao por protocolo."""
 import json
 import re
 import sqlite3
@@ -17,7 +17,7 @@ def init_schema(connection):
         ''')
 
 
-def update(connection, body, transport=None):
+def update(connection, body, transport=None, allow_notification=None):
     if not isinstance(body, dict): raise ValueError('Dados invalidos.')
     rid, target, operator = body.get('id'), body.get('status'), body.get('operator')
     if not isinstance(rid,str) or target not in ('in_progress','resolved'):
@@ -41,11 +41,12 @@ def update(connection, body, transport=None):
             return {'updated':True,'notification_status':'not_requested'}
         if row[0]!='in_progress' or not work: raise ValueError('Assuma o atendimento antes de concluir.')
         match=re.fullmatch(r'waha_(\d{6,20})_(c_us|lid)',row[1])
-        status='sending' if match else 'local_only'
-        text='AURA | Demonstracao\n\nA recepcao marcou seu atendimento como concluido. Protocolo: '+rid+'. Se ainda precisar de ajuda, responda com [AURA TESTE] e sua mensagem.'
+        authorized = not match or allow_notification is None or allow_notification(row[1])
+        status='blocked' if not authorized else 'sending' if match else 'local_only'
+        text='AURA | Demonstracao\n\nA recepcao marcou seu atendimento como concluido. Protocolo: '+rid+'. Se ainda precisar de ajuda, responda com sua mensagem.'
         db.execute("UPDATE handoffs SET status='resolved' WHERE id=?",(rid,))
         db.execute('UPDATE handoff_work SET completed_at=?,notification_status=?,notification_text=? WHERE id=?',(now,status,text,rid))
-    if not match: return {'updated':True,'notification_status':status}
+    if not match or not authorized: return {'updated':True,'notification_status':status}
     payload={'session':'default','chatId':match[1]+('@c.us' if match[2]=='c_us' else '@lid'),'text':text,'linkPreview':False}
     try:
         provider=(transport or state.send_waha)(payload)

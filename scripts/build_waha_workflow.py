@@ -15,22 +15,18 @@ workflow = dict(id='auraWahaInput03', name='WF-03 | WAHA - AURA | Conversa de te
     connections={a:dict(main=[[dict(node=b, type='main', index=0)]]) for a,b in zip(names,names[1:])},
     settings=dict(executionOrder='v1', saveDataSuccessExecution='none', saveDataErrorExecution='none', saveManualExecutions=False))
 
-# Consulta a base atual a cada mensagem, sem incluir telefone na chamada ao modelo.
-context = dict(parameters=dict(method='POST', url='http://127.0.0.1:8787/api/knowledge/context', sendBody=True, specifyBody='json', jsonBody='={{ JSON.stringify({message: $json.message, request_id: $json.request_id, session_id: $json.session_id}) }}', options=dict(timeout=15000)), id='aura-knowledge', name='Carregar base do hotel', type='n8n-nodes-base.httpRequest', typeVersion=4.2, position=[780,0])
-condition = dict(parameters=dict(conditions=dict(boolean=[dict(value1='={{ $json.use_ai }}', operation='equal', value2=True)])), id='aura-ai-condition', name='Consultar IA?', type='n8n-nodes-base.if', typeVersion=1, position=[1040,0])
-model = dict(parameters=dict(method='POST', url='https://api.openai.com/v1/chat/completions', authentication='predefinedCredentialType', nodeCredentialType='openAiApi', sendBody=True, specifyBody='json', jsonBody='={{ JSON.stringify($json.model_request) }}', options=dict(timeout=25000)), id='aura-openai', name='IA - consultar politicas', type='n8n-nodes-base.httpRequest', typeVersion=4.2, position=[1300,-160], onError='continueRegularOutput', retryOnFail=False)
-commit = dict(parameters=dict(method='POST', url='http://127.0.0.1:8787/api/chat/knowledge', sendBody=True, specifyBody='json', jsonBody="={{ JSON.stringify({message: $('Carregar base do hotel').item.json.message, request_id: $('Carregar base do hotel').item.json.request_id, session_id: $('Carregar base do hotel').item.json.session_id, knowledge_version: $('Carregar base do hotel').item.json.knowledge_version, model_output: $json}) }}", options=dict(timeout=15000)), id='aura-knowledge-save', name='Validar fonte e registrar', type='n8n-nodes-base.httpRequest', typeVersion=4.2, position=[1560,-160])
-nodes.extend([context,condition,model,commit])
-workflow['name']='WF-03 | AURA - Base do hotel e WhatsApp'
 def link(name): return [dict(node=name,type='main',index=0)]
-workflow['connections']['Identificador SHA256']={'main':[link(context['name'])]}
-workflow['connections'][context['name']]={'main':[link(condition['name'])]}
-workflow['connections'][condition['name']]={'main':[link(model['name']),link('AURA - processar')]}
-workflow['connections'][model['name']]={'main':[link(commit['name'])]}
-workflow['connections'][commit['name']]={'main':[link('Preparar resposta WhatsApp')]}
-for n in nodes:
-    if n['name']=='AURA - processar': n['position']=[1300,180]
-    if n['name']=='Preparar resposta WhatsApp': n['position']=[1820,0]
-    if n['name']=='WAHA - enviar resposta': n['position']=[2080,0]
+
+# Gate before context/model: unapproved participants produce no persisted interaction.
+gate = dict(parameters=dict(method='POST', url='http://127.0.0.1:8787/api/pilot/check', sendBody=True, specifyBody='json', jsonBody='={{ JSON.stringify($json) }}', options=dict(timeout=15000)), id='aura-pilot-check', name='Verificar contato autorizado', type='n8n-nodes-base.httpRequest', typeVersion=4.2, position=[650,-250])
+allowed = dict(parameters=dict(conditions=dict(boolean=[dict(value1='={{ $json.allowed }}', operation='equal', value2=True)])), id='aura-pilot-condition', name='Contato autorizado?', type='n8n-nodes-base.if', typeVersion=1, position=[900,-250])
+nodes.extend([gate,allowed])
+workflow['connections']['Identificador SHA256']={'main':[link(gate['name'])]}
+workflow['connections'][gate['name']]={'main':[link(allowed['name'])]}
+workflow['connections'][allowed['name']]={'main':[link('AURA - processar'),[]]}
+for node in nodes:
+    if node.get('parameters',{}).get('url','').startswith('http://127.0.0.1:8787/'):
+        node['parameters'].update(authentication='genericCredentialType',genericAuthType='httpHeaderAuth')
+        node['credentials']={'httpHeaderAuth':{'id':'auraLocalService','name':'AURA - servico local'}}
 
 (ROOT/'workflows/WF-03-waha-entrada.json').write_text(json.dumps(workflow, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')

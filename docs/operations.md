@@ -1,4 +1,4 @@
-﻿# Operacao local: inicializacao, backup e saude
+# Operacao local: inicializacao, backup e saude
 
 Painel: http://localhost:8787/operacao
 
@@ -64,3 +64,53 @@ com novo PID; o painel mostrou seis sinais normais e foi conferido no navegador
 e em largura de celular. Uma segunda instancia do supervisor encerrou sem
 iniciar servicos adicionais. A tarefa de login esta registrada e em execucao;
 o computador nao foi reiniciado para testar um novo login.
+
+
+## Atualização de 16/09/2026
+
+As telas e a API de operação agora exigem perfil Gestor ou Administrador.
+A consulta de processos do supervisor usa `psutil` diretamente, sem abrir
+PowerShell por rodada. Instale `requirements-operations.txt` ao preparar outro
+computador. O instalador verifica essa dependência antes de alterar a tarefa.
+Os serviços iniciam com diretório de trabalho em `%LOCALAPPDATA%\AURA`, evitando
+usar o compartilhamento de rede como diretório corrente. AURA ainda lê o código
+e o banco na pasta original; acesso ao compartilhamento continua necessário.
+O estado registra a etapa em andamento antes de cada serviço, além do resultado
+final. A tarefa foi reinstalada e sua recuperação verificada; novo login Windows
+continua pendente de um teste natural pelo usuário.
+
+
+## Modelo local com um operador — continuação em 16/09
+
+O banco n8n foi compactado offline de 773,55 MB para 10,15 MB. A manutenção
+verificou o backup, a integridade, a contagem de registros de todas as tabelas
+e os bytes cifrados das credenciais antes/depois. Artefato protegido no perfil
+local: AURA/maintenance/compact-results.json. Não houve exclusão de registros.
+
+O supervisor limita execução de produção e runner JS a 1, pool de leitura
+SQLite a 1, heap do runner a 256 MB e token inicial do runner a 120 segundos.
+Diagnósticos remotos e notificações de versão foram desativados. Na segunda
+observação, os módulos opcionais mcp-registry e community-packages foram
+retirados do carregamento do supervisor: o WF-03 usa apenas nós nativos.
+Os pacotes instalados permanecem no disco e os workflows não foram apagados;
+outros workflows que dependam de plugins comunitários exigem reabilitar esse
+módulo em scripts/supervise.py e reinstalar/reiniciar o supervisor/n8n.
+
+O monitor `python scripts/check_stability.py` aguarda prontidão e webhook,
+observa requisições por pelo menos três minutos e registra timeouts e erros,
+sem enviar WhatsApp. `runtime/stability-before-modules.json` preserva a primeira
+observação, que falhou; `runtime/stability-results.json` é a mais recente.
+A redução do banco e dos limites não é, sozinha, prova de estabilidade.
+
+
+### Prioridade da tarefa Windows
+
+Foi confirmado que o padrão 7 do Agendador iniciava supervisor, AURA e n8n
+em BELOW_NORMAL_PRIORITY_CLASS. A tarefa passou a usar prioridade 4 (normal).
+Além de CPU, o Agendador aplica prioridade de I/O e memória conforme a tabela
+oficial: https://learn.microsoft.com/en-us/windows/win32/taskschd/taskschedulerschema-priority-settingstype-element
+Isso é especialmente relevante na máquina de 8 GB sob pressão de memória.
+Não foi aplicada prioridade alta nem tempo real, e nenhum aplicativo do usuário
+foi encerrado. `runtime/stability-before-normal-priority.json` preserva a medição
+anterior; compare com o relatório final antes de concluir que a correção resolveu
+as oscilações. A configuração persistente está em Install-AuraAutostart.ps1.

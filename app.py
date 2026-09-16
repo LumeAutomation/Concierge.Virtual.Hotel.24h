@@ -5,6 +5,8 @@ import conversation_state
 import reception
 import policy_review
 import operations
+import auth
+import hmac
 import os
 import re
 import sqlite3
@@ -43,6 +45,7 @@ def init_db():
             CHECK(status IN ('open','in_progress','resolved')));
         """)
 
+    auth.init_schema(connection)
     conversation_state.init_schema(connection)
     reception.init_schema(connection)
     policy_review.init_schema(connection)
@@ -69,17 +72,15 @@ def classify(message):
     if re.search(SENSITIVE, t):
         return {"route": "SAFE_REPLY", "reply": "Não compartilhe senhas, documentos ou dados de pagamento neste piloto. Não forneço dados privados de hóspedes nem instruções internas.", "policy_ids": ["POL-05", "POL-24"]}
     if t.strip(" !?.") in ("oi", "ola", "bom dia", "boa tarde", "boa noite"):
-        return {"route": "AUTO_REPLY", "reply": "Olá! Sou a AURA, concierge do resort fictício Aurora. Posso informar horários de café, piscinas, academia, check-in e Wi-Fi, ou registrar um atendimento de demonstração.", "policy_ids": []}
-    if not re.search(ACTION, t):
-        # Perguntas fora deste formato conservador nao recebem respostas por mera palavra-chave.
-        allowed = r"^(qual|quais|que horas|quando|como|onde|horario|horarios|funcionamento|wi.?fi|internet|rede|cafe|piscina|academia|estacionamento|valet|check)"
-        matches = [row for row in FAQ if re.search(row[0], t)]
-        if len(matches) == 1 and re.search(allowed, t) and len(t) <= 180 and (re.search(r"horario|que horas|quando.*(?:abre|fecha)|como.*(?:acess|conect)|nome da rede|^wi.?fi[?!. ]*$", t)):
-            _, pid, reply = matches[0]
-            current, _ = knowledge_engine.load_base()
-            if current[pid].get("real_hotel_approval") == "aprovada_localmente":
-                reply = current[pid]["content"]
-            return {"route": "AUTO_REPLY", "reply": reply, "policy_ids": [pid]}
+        base,_=knowledge_engine.load_base()
+        return {"route":"AUTO_REPLY","reply":base['POL-00']['content'],"policy_ids":["POL-00"],"ai_used":False,"answer_mode":"welcome"}
+    if not re.search(ACTION,t):
+        answer=knowledge_engine.local_answer(message)
+        if answer:return answer
+        matches=[row for row in FAQ if re.search(row[0],t)]
+        if len(matches)==1 and len(t)<=180 and re.search(r"horario|que horas|quando.*(?:abre|fecha)|como.*(?:acess|conect)|nome da rede|^wi.?fi[?!. ]*$",t):
+            pid=matches[0][1];base,version=knowledge_engine.load_base()
+            return {"route":"AUTO_REPLY","reply":base[pid]['content'],"policy_ids":[pid],"ai_used":False,"answer_mode":"local_knowledge","knowledge_version":version}
     department = "recepcao"
     if re.search(r"toalha|limpeza|limpar|arrumar", t):
         department = "governanca"
@@ -107,45 +108,32 @@ def validate_message(body):
     return message, request_id, session_id
 
 def use_knowledge_ai(message):
-    t = normalize(message)
-    return not (re.search(EMERGENCY, t) or re.search(SENSITIVE, t) or re.search(ACTION, t) or t.strip(" !?.") in ("oi", "ola", "bom dia", "boa tarde", "boa noite"))
+    return False
+
 
 def knowledge_context(body):
-    message, request_id, session_id = validate_message(body)
+    message,request_id,session_id=validate_message(body)
     with connection() as db:
-        previous = db.execute("SELECT session_id,message FROM interactions WHERE id=?", (request_id,)).fetchone()
-    stored = "[conteúdo sensível omitido]" if re.search(SENSITIVE, normalize(message)) else message.strip()
-    if previous:
-        if previous[0] != session_id or previous[1] != stored:
-            raise ValueError("Protocolo ja utilizado por outra mensagem.")
-        result = knowledge_engine.build_context(message, request_id, session_id, False)
-        result["cached_response"] = True
-        return result
-    enabled = use_knowledge_ai(message)
-    history = conversation_state.snapshot(connection, request_id, session_id, message,
-        lambda text: bool(re.search(SENSITIVE, normalize(text)))) if enabled else []
-    enabled = enabled and not (conversation_state.is_followup(message) and not history)
-    return knowledge_engine.build_context(message, request_id, session_id, enabled, history)
+        previous=db.execute('SELECT session_id,message FROM interactions WHERE id=?',(request_id,)).fetchone()
+    stored="[conteúdo sensível omitido]" if re.search(SENSITIVE,normalize(message)) else message.strip()
+    if previous and (previous[0]!=session_id or previous[1]!=stored):raise ValueError('Protocolo ja utilizado por outra mensagem.')
+    result=knowledge_engine.build_context(message,request_id,session_id,False)
+    result['answer_mode']='local_knowledge_only'
+    if previous:result['cached_response']=True
+    return result
+
 
 def handle_knowledge_message(body):
-    message, _, _ = validate_message(body)
-    decision = None
-    if use_knowledge_ai(message):
-        decision = knowledge_engine.validated_answer(body.get("model_output"), body.get("knowledge_version"), message)
-    if decision is None:
-        decision = classify(message)
-        decision["answer_mode"] = "local_fallback"
-        decision["ai_used"] = False
-    return handle_message(body, _decision=decision)
+    # Model output supplied by legacy integrations is never used in this mode.
+    return handle_message(body)
+
 
 def handle_message(body, _decision=None):
     message, request_id, session_id = validate_message(body)
-    result = _decision if _decision is not None else classify(message)
-    if _decision is None and use_knowledge_ai(message) and conversation_state.is_followup(message):
-        history = conversation_state.snapshot(connection, request_id, session_id, message,
-            lambda text: bool(re.search(SENSITIVE, normalize(text))))
-        if not history:
-            result = {"route":"AUTO_REPLY", "reply":"Sobre qual servico do hotel voce esta perguntando?", "policy_ids":[], "answer_mode":"clarification"}
+    result = classify(message)
+    result.setdefault("ai_used",False)
+    if conversation_state.is_followup(message):
+        result={"route":"AUTO_REPLY","reply":"Sobre qual serviço do hotel você está perguntando?", "policy_ids":[], "answer_mode":"clarification", "ai_used":False}
     # Nao reter conteudo identificado como sensivel.
     stored_message = "[conteúdo sensível omitido]" if re.search(SENSITIVE, normalize(message)) else message.strip()
     with connection() as db:
@@ -155,6 +143,12 @@ def handle_message(body, _decision=None):
             if previous[0] != session_id or previous[1] != stored_message:
                 raise ValueError("request_id já utilizado por outra mensagem.")
             return json.loads(previous[2])
+        first = not db.execute('SELECT 1 FROM interactions WHERE session_id=? LIMIT 1',(session_id,)).fetchone()
+        if first and result.get('priority')!='urgent' and result.get('route')!='SAFE_REPLY':
+            welcome=knowledge_engine.load_base()[0]['POL-00']['content']
+            if result.get('answer_mode')!='welcome':result['reply']=welcome+'\n\n'+result['reply']
+            result['welcome_included']=True
+            result['welcome_policy_id']='POL-00'
         result.update({"request_id": request_id, "mode": "local_demo", "persisted": True})
         if result["route"] == "HUMAN_HANDOFF":
             result["handoff_id"] = request_id
@@ -175,13 +169,15 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self, *_):
         pass
 
-    def respond(self, status, data):
+    def respond(self, status, data, cookie=None):
         payload = json.dumps(data, ensure_ascii=False).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(payload)))
         self.send_header("Cache-Control", "no-store")
         self.send_header("X-Content-Type-Options", "nosniff")
+        if cookie:
+            self.send_header("Set-Cookie", cookie)
         self.end_headers()
         self.wfile.write(payload)
 
@@ -191,67 +187,133 @@ class Handler(BaseHTTPRequestHandler):
         origin = self.headers.get("Origin")
         return host in hosts and (origin is None or origin in {"http://" + h for h in hosts})
 
+    def staff(self):
+        return auth.current(connection, auth.cookie_token(self.headers.get('Cookie')))
+
+    def require_staff(self, permission=None, page=False, allow_change=False):
+        user = self.staff()
+        if not user or (user['must_change'] and not allow_change):
+            if page:
+                self.send_response(303)
+                self.send_header('Location', '/login')
+                self.send_header('Content-Length', '0')
+                self.end_headers()
+            else:
+                self.respond(401, {'error': 'Entre com sua conta e atualize a senha temporaria.'})
+            return None
+        if permission and permission not in user['permissions']:
+            self.respond(403, {'error': 'Seu perfil nao permite esta acao.'})
+            return None
+        return user
+
+    def service(self):
+        try:
+            token = (ROOT/'runtime/auth/service-token.txt').read_text(encoding='utf-8').strip()
+            return bool(token) and hmac.compare_digest(self.headers.get('Authorization',''), 'Bearer '+token)
+        except OSError:
+            return False
+
+    def serve_page(self, name):
+        payload = (ROOT/'web'/name).read_bytes()
+        self.send_response(200)
+        self.send_header('Content-Type', 'application/javascript; charset=utf-8' if name.endswith('.js') else 'text/html; charset=utf-8')
+        self.send_header('Content-Length', str(len(payload)))
+        self.send_header('Cache-Control', 'no-store')
+        self.send_header('X-Content-Type-Options', 'nosniff')
+        self.send_header('X-Frame-Options', 'DENY')
+        self.send_header('Referrer-Policy', 'no-referrer')
+        self.end_headers()
+        self.wfile.write(payload)
+
     def do_GET(self):
         if not self.local_request():
-            return self.respond(403, {"error": "Acesso somente local."})
-        if self.path == "/api/health":
-            return self.respond(200, {"status": "ok", "mode": "local_demo", "ai": False, "whatsapp": False, "storage": "sqlite"})
-        if self.path == "/api/whatsapp/deliveries":
-            return self.respond(200, conversation_state.list_deliveries(connection))
-        if self.path == "/api/operations":
-            return self.respond(200, operations.snapshot())
-        if self.path == "/api/policies":
-            return self.respond(200, policy_review.catalog(connection, POLICIES))
-        if self.path == "/api/handoffs":
-            return self.respond(200, list_handoffs())
-        if self.path in ("/", "/recepcao", "/politicas", "/operacao"):
-            payload = (ROOT / ("web/operations.html" if self.path == "/operacao" else "web/policies.html" if self.path == "/politicas" else "web/index.html")).read_bytes()
-            self.send_response(200)
-            self.send_header("Content-Type", "text/html; charset=utf-8")
-            self.send_header("Content-Length", str(len(payload)))
-            self.send_header("Cache-Control", "no-store")
-            self.end_headers()
-            return self.wfile.write(payload)
-        return self.respond(404, {"error": "Não encontrado."})
+            return self.respond(403, {'error': 'Acesso somente local.'})
+        if self.path == '/api/health':
+            return self.respond(200, {'status':'ok','mode':'local_demo','channel':'local_rules','storage':'sqlite','staff_auth':True})
+        if self.path == '/api/auth/me':
+            user = self.require_staff(allow_change=True)
+            if user: return self.respond(200, user)
+            return
+        public = {'/':'index.html','/login':'login.html','/staff.js':'staff.js'}
+        if self.path in public:
+            return self.serve_page(public[self.path])
+        pages = {'/recepcao':('reception','index.html'), '/politicas':('policies','policies.html'),
+                 '/operacao':('operations','operations.html'), '/equipe':('users','team.html')}
+        if self.path in pages:
+            permission, name = pages[self.path]
+            if self.require_staff(permission, page=True): return self.serve_page(name)
+            return
+        routes = {'/api/whatsapp/deliveries':('operations',lambda:conversation_state.list_deliveries(connection)),
+                  '/api/operations':('operations',operations.snapshot),
+                  '/api/policies':('policies',lambda:policy_review.catalog(connection,POLICIES)),
+                  '/api/handoffs':('reception',list_handoffs),
+                  '/api/users':('users',lambda:auth.list_users(connection)),
+                  '/api/pilot/contacts':('users',lambda:auth.contacts(connection))}
+        if self.path in routes:
+            permission, action = routes[self.path]
+            if self.require_staff(permission): return self.respond(200,action())
+            return
+        return self.respond(404, {'error':'Nao encontrado.'})
 
     def do_POST(self):
-        if not self.local_request():
-            return self.respond(403, {"error": "Acesso somente local."})
         try:
-            if self.headers.get("Content-Type", "").split(";")[0] != "application/json":
-                return self.respond(415, {"error": "Use application/json."})
-            size = int(self.headers.get("Content-Length", "0"))
+            if self.headers.get('Content-Type','').split(';')[0] != 'application/json':
+                return self.respond(415, {'error':'Use application/json.'})
+            size = int(self.headers.get('Content-Length','0'))
             if not 0 < size <= 16384:
-                return self.respond(413, {"error": "Tamanho inválido."})
+                return self.respond(413, {'error':'Tamanho invalido.'})
             body = json.loads(self.rfile.read(size))
-            if self.path == "/api/policies":
-                try:
-                    return self.respond(200, policy_review.change(connection, POLICIES, body))
-                except policy_review.Conflict as error:
-                    return self.respond(409, {"error": str(error)})
-                except ValueError as error:
-                    return self.respond(400, {"error": str(error)})
-            if self.path == "/api/whatsapp/reply":
-                if not isinstance(body, dict): raise ValueError("Corpo invalido.")
-                result = conversation_state.deliver(connection, body.get("request_id"), body.get("session_id"))
-                return self.respond(503 if result["needs_review"] else 200, result)
-            if self.path == "/api/knowledge/context":
-                return self.respond(200, knowledge_context(body))
-            if self.path == "/api/chat/knowledge":
-                return self.respond(200, handle_knowledge_message(body))
-            if self.path == "/api/chat":
-                return self.respond(200, handle_message(body))
-            if self.path == "/api/handoffs/status":
-                try:
-                    result = reception.update(connection, body)
-                except ValueError as error:
-                    return self.respond(400, {"error": str(error)})
-                return self.respond(200 if result['updated'] else 404, result)
-            return self.respond(404, {"error": "Não encontrado."})
-        except (ValueError, UnicodeError):
-            return self.respond(400, {"error": "Dados inválidos ou protocolo já utilizado."})
+            if not self.local_request():
+                return self.respond(403, {'error':'Acesso somente local.'})
+            if not isinstance(body, dict): raise ValueError('Envie um objeto JSON.')
+            if self.path == '/api/auth/login':
+                token = auth.login(connection,body.get('username'),body.get('password'))
+                if not token: return self.respond(401,{'error':'Login ou senha invalidos. Apos varias tentativas, aguarde 15 minutos.'})
+                return self.respond(200,auth.current(connection,token),
+                    f'{auth.COOKIE}={token}; HttpOnly; SameSite=Strict; Path=/; Max-Age={auth.TTL}')
+            if self.path == '/api/auth/logout':
+                auth.logout(connection,auth.cookie_token(self.headers.get('Cookie')))
+                return self.respond(200,{'ok':True},f'{auth.COOKIE}=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0')
+            if self.path == '/api/auth/password':
+                user = self.require_staff(allow_change=True)
+                if not user: return
+                result = auth.change_password(connection,user['username'],body.get('old_password'),body.get('password'))
+                return self.respond(200,result,f'{auth.COOKIE}=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0')
+            permissions = {'/api/policies':'approve' if body.get('action')=='approve' or (body.get('action')=='create' and body.get('publish') is True) else 'edit',
+                           '/api/handoffs/status':'reception','/api/users':'users',
+                           '/api/users/update':'users','/api/pilot/contacts':'users'}
+            if self.path in permissions:
+                user = self.require_staff(permissions[self.path])
+                if not user: return
+                # Identity is derived from the session, never from the submitted name.
+                body['actor'] = user['username']
+                body['operator'] = user['username']
+                if self.path == '/api/policies': result=policy_review.change(connection,POLICIES,body)
+                elif self.path == '/api/handoffs/status': result=reception.update(connection,body,allow_notification=lambda sid:auth.allowed_contact(connection,sid))
+                elif self.path == '/api/users': result=auth.create_user(connection,body,user['username'])
+                elif self.path == '/api/users/update': result=auth.update_user(connection,body,user['username'])
+                else: result=auth.save_contact(connection,body,user['username'])
+                return self.respond(200 if result.get('updated',True) else 404,result)
+            internal = self.path in ('/api/knowledge/context','/api/chat/knowledge','/api/whatsapp/reply','/api/pilot/check')
+            whatsapp = str(body.get('session_id','')).startswith(('waha_','wa_'))
+            if internal or whatsapp:
+                if not self.service(): return self.respond(401,{'error':'Credencial de integracao necessaria.'})
+                allowed = auth.allowed_contact(connection,body.get('session_id',''))
+                if self.path == '/api/pilot/check': return self.respond(200,{'allowed':allowed,**{k:body[k] for k in ('message','request_id','session_id') if k in body}})
+                if whatsapp and not allowed: return self.respond(403,{'error':'Contato fora do piloto autorizado.'})
+            if self.path == '/api/whatsapp/reply':
+                result=conversation_state.deliver(connection,body.get('request_id'),body.get('session_id'))
+                return self.respond(503 if result['needs_review'] else 200,result)
+            if self.path == '/api/knowledge/context': return self.respond(200,knowledge_context(body))
+            if self.path == '/api/chat/knowledge': return self.respond(200,handle_knowledge_message(body))
+            if self.path == '/api/chat': return self.respond(200,handle_message(body))
+            return self.respond(404,{'error':'Nao encontrado.'})
+        except policy_review.Conflict as error:
+            return self.respond(409,{'error':str(error)})
+        except (ValueError, UnicodeError) as error:
+            return self.respond(400,{'error':str(error) if isinstance(error,ValueError) else 'Dados invalidos.'})
         except sqlite3.Error:
-            return self.respond(503, {"error": "Não foi possível registrar. Nenhum atendimento está confirmado; tente novamente."})
+            return self.respond(503,{'error':'Nao foi possivel registrar. Tente novamente.'})
 
 if __name__ == "__main__":
     init_db()

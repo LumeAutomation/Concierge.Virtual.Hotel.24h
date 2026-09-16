@@ -1,5 +1,23 @@
 [
   {
+    "id": "POL-00",
+    "hotel_id": "aurora_grand_resort",
+    "title": "Apresentação e boas-vindas",
+    "content": "Olá! Sou a AURA, assistente virtual do Aurora Grand Resort & Spa, um hotel de demonstração. Seja bem-vindo(a)! Posso consultar as informações cadastradas ou encaminhar seu pedido para o responsável. Como posso ajudar?",
+    "language": "pt-BR",
+    "status": "active",
+    "version": 2,
+    "audience": "guest",
+    "department": "recepcao",
+    "example_question": "Olá",
+    "escalate_when": "Endereço e contatos precisam ser substituídos antes de uso real. Referências de redes hoteleiras fundamentam os temas, mas não transferem suas condições ao Aurora.",
+    "source_refs": [],
+    "origin": "proposta_autoral_para_piloto",
+    "deployment_scope": "hotel_ficticio",
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-15"
+  },
+  {
     "id": "POL-01",
     "hotel_id": "aurora_grand_resort",
     "title": "Identidade do hotel",

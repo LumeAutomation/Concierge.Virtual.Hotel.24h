@@ -25,15 +25,15 @@ class KnowledgeTests(unittest.TestCase):
         return value
     def test_base_and_no_guest_identifiers_in_model(self):
         c=app.knowledge_context(self.body(session_id='private_session'))
-        self.assertEqual(c['policy_count'],100)
-        self.assertTrue(c['use_ai'])
-        self.assertNotIn('private_session',json.dumps(c['model_request']))
-        self.assertNotIn('kb-test-0001',json.dumps(c['model_request']))
+        self.assertEqual(c['policy_count'],101)
+        self.assertFalse(c['use_ai'])
+        self.assertNotIn('model_request',c)
     def test_extract_persisted_and_idempotent(self):
-        body=self.body()
+        body=self.body(message=self.policies['POL-08']['example_question'])
         first=app.handle_knowledge_message(body)
-        self.assertEqual(first['answer_mode'],'knowledge_extract')
-        self.assertEqual(first['policy_ids'],['POL-14'])
+        self.assertEqual(first['answer_mode'],'local_knowledge')
+        self.assertEqual(first['policy_ids'],['POL-08'])
+        self.assertFalse(first['ai_used'])
         self.assertTrue(first['persisted'])
         self.assertEqual(first,app.handle_knowledge_message(body))
         self.assertEqual(app.list_handoffs(),[])
@@ -73,8 +73,8 @@ class KnowledgeTests(unittest.TestCase):
             self.assertNotEqual(before,kb.load_base()[1])
 
     def test_v2_catalog_and_new_guest_policy(self):
-        self.assertEqual(set(self.policies),{f'POL-{i:02}' for i in range(1,101)})
-        self.assertEqual(len(kb.guest_ids(self.policies)),88)
+        self.assertEqual(set(self.policies),{f'POL-{i:02}' for i in range(0,101)})
+        self.assertEqual(len(kb.guest_ids(self.policies)),89)
         self.assertIn('POL-57',kb.guest_ids(self.policies))
         self.assertNotIn('POL-100',kb.guest_ids(self.policies))
         result=kb.validated_answer(self.output(pid='POL-57'),self.version)
