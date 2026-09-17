@@ -1,3 +1,22 @@
+# Correcao de recebimento e resposta ? 17/09/2026
+
+A sessao WAHA pode ter nome diferente de `default`. Configure o nome em
+`runtime/waha/session.json`, por exemplo `{"name":"Lume"}`. Sem o arquivo,
+o padrao continua `default`. Entrada gerada, envio e monitoramento usam essa
+configuracao. Ao alterar o nome, gere e publique novamente o WF-03, reinicie
+AURA/n8n e execute `scripts/connect_waha_n8n.py`.
+
+O webhook permanente e `/webhook/aura-waha-entrada`. O conector remove a
+variante `/webhook-test/` desta integracao, preserva outros webhooks e salva
+backup da configuracao anterior. A credencial de entrada deve estar vinculada.
+O instalador recupera o vinculo local existente se ele foi removido no editor.
+
+Contatos precisam estar ativos em `/equipe`; uma lista vazia bloqueia todas
+as entradas. Mensagens enviadas pela propria conta do robo sao ignoradas.
+A validacao tecnica nao substitui a confirmacao da resposta no celular.
+
+---
+
 # Atualização do modelo — 16/09/2026
 
 Texto normal de contatos autorizados é aceito sem prefixo. O WF-03 publicado

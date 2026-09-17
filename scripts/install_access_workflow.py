@@ -27,7 +27,13 @@ def main():
             node['credentials']=credentials[node['name']]
     for name in ['WAHA - entrada']:
         node=next(n for n in template['nodes'] if n['name']==name)
-        if not node.get('credentials'):raise RuntimeError('Vinculo de credencial existente ausente: '+name)
+        if not node.get('credentials'):
+            # Recupera somente o vinculo local conhecido, sem criar outro segredo.
+            saved=json.loads((ROOT/'runtime/waha/n8n-header-credential.json').read_text(encoding='utf-8-sig'))[0]
+            with sqlite3.connect(database.as_uri()+'?mode=ro',uri=True) as db:
+                found=db.execute('SELECT name FROM credentials_entity WHERE id=? AND type=?',(saved['id'],'httpHeaderAuth')).fetchone()
+            if not found:raise RuntimeError('Credencial local do webhook ausente.')
+            node['credentials']={'httpHeaderAuth':{'id':saved['id'],'name':found[0]}}
     token=(STATE/'service-token.txt').read_text(encoding='utf-8').strip()
     credential=[dict(id='auraLocalService',name='AURA - servico local',type='httpHeaderAuth',data=dict(name='Authorization',value='Bearer '+token))]
     secret=STATE/'service-credential.json'

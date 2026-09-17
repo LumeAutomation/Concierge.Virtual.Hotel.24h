@@ -1,9 +1,9 @@
-$ErrorActionPreference='Stop'
+﻿$ErrorActionPreference='Stop'
 $projectRoot=(Resolve-Path (Join-Path $PSScriptRoot '..')).ProviderPath
 $pythonw=Join-Path $env:LOCALAPPDATA 'Programs\Python\Python312\pythonw.exe'
 if (-not (Test-Path -LiteralPath $pythonw)) { throw 'Python312 nao encontrado.' }
 $python=Join-Path (Split-Path $pythonw -Parent) 'python.exe'
-& $python -c "import psutil"
+& $python -c "import psutil, waitress"
 if ($LASTEXITCODE -ne 0) { throw 'Instale a dependencia operacional: python -m pip install -r requirements-operations.txt' }
 $projectRoot=(& $python -c "from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve())" $projectRoot).Trim()
 if (Get-ScheduledTask -TaskName 'AURA - Supervisor local' -ErrorAction SilentlyContinue) { Stop-ScheduledTask -TaskName 'AURA - Supervisor local' }
@@ -12,6 +12,7 @@ New-Item -ItemType Directory -Force -Path $agentRoot | Out-Null
 Copy-Item -LiteralPath (Join-Path $projectRoot 'operations.py') -Destination (Join-Path $agentRoot 'operations.py') -Force
 Copy-Item -LiteralPath (Join-Path $projectRoot 'scripts\supervise.py') -Destination (Join-Path $agentRoot 'supervise.py') -Force
 @{root=$projectRoot} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $agentRoot 'project.json') -Encoding UTF8
+Copy-Item -LiteralPath (Join-Path $projectRoot 'waha_config.py') -Destination (Join-Path $agentRoot 'waha_config.py') -Force
 $script=Join-Path $agentRoot 'supervise.py'
 
 $action=New-ScheduledTaskAction -Execute $pythonw -Argument ('"'+$script+'"') -WorkingDirectory $agentRoot

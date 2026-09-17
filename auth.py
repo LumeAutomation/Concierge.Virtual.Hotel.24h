@@ -7,9 +7,9 @@ import sqlite3
 import time
 from http.cookies import SimpleCookie
 
-ROLES = {'admin': {'reception','policies','edit','approve','operations','users'},
+ROLES = {'admin': {'reception','policies','edit','approve','operations','users','settings'},
          'recepcao': {'reception'}, 'editor': {'policies','edit'},
-         'gestor': {'reception','policies','edit','approve','operations'}}
+         'gestor': {'reception','policies','edit','approve','operations','settings'}}
 COOKIE = 'aura_session'
 TTL = 8 * 3600
 

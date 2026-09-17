@@ -5,6 +5,9 @@ from urllib.request import Request,build_opener,ProxyHandler
 from urllib.error import HTTPError
 import psutil
 ROOT=Path(__file__).resolve().parents[1]
+import sys
+sys.path.insert(0,str(ROOT))
+from waha_config import session_name
 STATE=ROOT/'runtime'
 OPENER=build_opener(ProxyHandler({}))
 
@@ -46,7 +49,7 @@ def main():
         if i%6==0:
             # No prefix, and an explicitly unauthorized synthetic sender.
             mid='stability-'+str(uuid.uuid4())
-            event={'event':'message','session':'default','payload':{'id':mid,'from':'000000000000@c.us','fromMe':False,'hasMedia':False,'body':'Qual o horario do cafe da manha?'}}
+            event={'event':'message','session':session_name(ROOT),'payload':{'id':mid,'from':'000000000000@c.us','fromMe':False,'hasMedia':False,'body':'Qual o horario do cafe da manha?'}}
             row['blocked_webhook']=request('http://127.0.0.1:5678/webhook/aura-waha-entrada',event,headers,timeout=20)
         rows.append(row)
         print(json.dumps(row),flush=True)

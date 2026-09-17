@@ -1,0 +1,12 @@
+﻿{
+  "hotel_name": "Hotel Aura",
+  "assistant_name": "Hostess",
+  "tagline": "Resort & Spa · hospitalidade em cada detalhe",
+  "primary_color": "#123d3a",
+  "address": "Alameda das Brisas, 100 · Costa Serena · endereço fictício para demonstração",
+  "contact_email": "recepcao@hotel-aura.example",
+  "website": "https://hotel-aura.example",
+  "reception_contact": "Recepção no lobby · atendimento presencial 24 horas. Contato telefônico a configurar para cada cliente.",
+  "accommodation_count": 420,
+  "demo_notice": "Hotel fictício para demonstração comercial. Horários, serviços e valores são exemplos; não constituem oferta ou reserva real."
+}

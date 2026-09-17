@@ -9,6 +9,8 @@ import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.request import Request, urlopen
+from urllib.parse import quote
+from waha_config import session_name
 
 ROOT=Path(os.environ.get('AURA_PROJECT_ROOT', str(Path(__file__).resolve().parent)))
 LOCAL=Path(os.environ.get('LOCALAPPDATA',str(ROOT/'runtime')))/'AURA'
@@ -102,7 +104,7 @@ def snapshot():
     except Exception:result['services']['workflow']={'status':'unknown'}
     try:
         values=dict(line.split('=',1) for line in (ROOT/'runtime/waha/.env').read_text(encoding='utf-8-sig').splitlines() if '=' in line and not line.startswith('#'))
-        session=get_json('http://127.0.0.1:3000/api/sessions/default',{'X-Api-Key':values['WAHA_API_KEY']})
+        session=get_json('http://127.0.0.1:3000/api/sessions/'+quote(session_name(ROOT),safe=''),{'X-Api-Key':values['WAHA_API_KEY']})
         result['services']['whatsapp']={'status':'ok' if session.get('status')=='WORKING' else 'error','session_status':session.get('status','unknown')}
     except Exception:result['services']['whatsapp']={'status':'error'}
     monitor=read_json(STATE);last=monitor.get('heartbeat')

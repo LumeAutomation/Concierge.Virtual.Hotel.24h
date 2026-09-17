@@ -10,6 +10,7 @@ from urllib.error import HTTPError
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 import app
 import operations
+from waha_config import session_name
 ROOT=app.ROOT
 
 def request(url,body=None,headers=None):
@@ -49,7 +50,7 @@ def main():
     headers={credential['name']:credential['value']}
     ignored=request('http://127.0.0.1:5678/webhook/aura-waha-entrada',{'event':'aura.connection.check'},headers)
     assert ignored[0]==200,('ignored_event',ignored[0])
-    denied=request('http://127.0.0.1:5678/webhook/aura-waha-entrada',dict(event='message',session='default',payload=dict(fromMe=False,**{'from':'000000000000@c.us'},hasMedia=False,body='Quero toalhas',id=probe)),headers)
+    denied=request('http://127.0.0.1:5678/webhook/aura-waha-entrada',dict(event='message',session=session_name(ROOT),payload=dict(fromMe=False,**{'from':'000000000000@c.us'},hasMedia=False,body='Quero toalhas',id=probe)),headers)
     assert denied[0]==200,('denied_event',denied[0])
     with app.connection() as db:after=db.execute('SELECT count(*) FROM interactions').fetchone()[0]
     assert after==before,'A denied event must not create an interaction.'

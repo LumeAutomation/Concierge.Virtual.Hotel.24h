@@ -51,7 +51,7 @@ class KnowledgeTests(unittest.TestCase):
     def test_error_refusal_truncation_and_empty(self):
         for out in [{}, {'error':'timeout'}, {'choices':[]}, {'choices':[{'finish_reason':'length','message':{'content':'{}'}}]}]:
             self.assertIsNone(kb.validated_answer(out,self.version))
-        self.assertEqual(app.handle_knowledge_message(self.body(model_output={}))['route'],'HUMAN_HANDOFF')
+        self.assertEqual(app.handle_knowledge_message(self.body(message='Qual a profundidade da piscina?',model_output={}))['route'],'HUMAN_HANDOFF')
     def test_actions_emergency_and_sensitive_bypass_model(self):
         for i,message in enumerate(['Quero reservar o spa','Quero toalhas','Socorro tem fogo','Minha senha e segredo']):
             body=self.body(message=message,request_id='kb-guard-'+str(i))

@@ -3,37 +3,37 @@
     "id": "POL-00",
     "hotel_id": "aurora_grand_resort",
     "title": "Apresentação e boas-vindas",
-    "content": "Olá! Sou a AURA, assistente virtual do Aurora Grand Resort & Spa, um hotel de demonstração. Seja bem-vindo(a)! Posso consultar as informações cadastradas ou encaminhar seu pedido para o responsável. Como posso ajudar?",
+    "content": "Olá! Sou {{assistant_name}}, assistente de {{hotel_name}}. Seja bem-vindo(a)! Posso ajudar com sua chegada, informações do hotel e pedidos para a equipe. Este é um hotel fictício de demonstração. Como posso ajudar?",
     "language": "pt-BR",
     "status": "active",
     "version": 2,
     "audience": "guest",
     "department": "recepcao",
     "example_question": "Olá",
-    "escalate_when": "Endereço e contatos precisam ser substituídos antes de uso real. Referências de redes hoteleiras fundamentam os temas, mas não transferem suas condições ao Aurora.",
+    "escalate_when": "Disponibilidade, identidade, valores finais e execução exigem confirmação da equipe. Dados demonstrativos não equivalem a oferta de empreendimento real.",
     "source_refs": [],
-    "origin": "proposta_autoral_para_piloto",
+    "origin": "modelo_comercial_ficticio_aura",
     "deployment_scope": "hotel_ficticio",
     "real_hotel_approval": "demonstrativa",
-    "reviewed_on": "2026-09-15"
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-01",
     "hotel_id": "aurora_grand_resort",
     "title": "Identidade do hotel",
-    "content": "O Aurora Grand Resort & Spa é um resort fictício de demonstração, com 420 acomodações e atendimento em português, inglês e espanhol. O endereço demonstrativo é Avenida Costa Imperial, 1500, Porto Dourado, Bahia. Serviços, horários e limites desta base são parâmetros do piloto, não informações de um empreendimento real.\n\nCondicoes e excecoes: Endereço e contatos precisam ser substituídos antes de uso real. Referências de redes hoteleiras fundamentam os temas, mas não transferem suas condições ao Aurora.",
+    "content": "{{hotel_name}} é um resort fictício de referência para demonstração comercial, com {{accommodation_count}} acomodações, gastronomia, piscinas, atividades para famílias e spa. {{tagline}}. Endereço: {{address}}. E-mail: {{contact_email}}. Site demonstrativo: {{website}}. Atendimento: {{reception_contact}}. {{demo_notice}}",
     "language": "pt-BR",
     "status": "active",
     "version": 2,
     "audience": "guest",
     "department": "recepcao",
     "example_question": "Onde fica o resort?",
-    "escalate_when": "Endereço e contatos precisam ser substituídos antes de uso real. Referências de redes hoteleiras fundamentam os temas, mas não transferem suas condições ao Aurora.",
+    "escalate_when": "Disponibilidade, identidade, valores finais e execução exigem confirmação da equipe. Dados demonstrativos não equivalem a oferta de empreendimento real.",
     "source_refs": [],
-    "origin": "proposta_autoral_para_piloto",
+    "origin": "modelo_comercial_ficticio_aura",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-02",
@@ -50,8 +50,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-03",
@@ -68,8 +68,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-04",
@@ -88,8 +88,8 @@
     ],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-05",
@@ -106,82 +106,80 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-06",
     "hotel_id": "aurora_grand_resort",
     "title": "Categorias e características das acomodações",
-    "content": "A categoria contratada determina capacidade, configuração de camas e itens incluídos. Preferência por andar, vista ou número de quarto deve ser registrada separadamente das características garantidas. A equipe confirma o inventário antes de assegurar uma unidade específica.\n\nCondicoes e excecoes: Não anunciar metragem, banheira, varanda ou cama extra sem descrição aprovada. Divergência entre anúncio e entrega exige análise de reservas.",
+    "content": "O catálogo demonstrativo possui cinco categorias: Aura Superior, 32 m², cama king ou duas camas de solteiro, até 2 adultos; Aura Jardim, 38 m², varanda e até 2 adultos e 1 criança; Aura Família, 52 m², dois ambientes e até 2 adultos e 2 crianças; Suíte Horizonte, 68 m², sala e varanda, até 2 adultos; Villa Serenidade, 110 m², dois dormitórios e até 4 pessoas. Todas possuem climatização, Wi-Fi, cofre e banheiro privativo. Camas extras, acessibilidade, vista e localização dependem da categoria e da confirmação de reservas. Valores de diária são cotados por período; não há tarifa ou disponibilidade garantida por este catálogo.",
     "language": "pt-BR",
     "status": "active",
     "version": 2,
     "audience": "guest",
     "department": "reservas",
     "example_question": "Minha categoria tem varanda?",
-    "escalate_when": "Não anunciar metragem, banheira, varanda ou cama extra sem descrição aprovada. Divergência entre anúncio e entrega exige análise de reservas.",
-    "source_refs": [
-      "REF-04"
-    ],
-    "origin": "proposta_autoral_para_piloto",
+    "escalate_when": "Disponibilidade, identidade, valores finais e execução exigem confirmação da equipe. Dados demonstrativos não equivalem a oferta de empreendimento real.",
+    "source_refs": [],
+    "origin": "modelo_comercial_ficticio_aura",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-07",
     "hotel_id": "aurora_grand_resort",
     "title": "Wi-Fi e suporte de conexão",
-    "content": "No piloto, a rede chama-se AuroraGuest. O acesso utiliza o sobrenome do responsável pela reserva e o número da acomodação. Em falha simples, esquecer a rede e reconectar pode ajudar. Problemas persistentes são encaminhados à TI sem solicitar senhas pessoais do hóspede.\n\nCondicoes e excecoes: Não garantir velocidade, cobertura integral ou compatibilidade com VPN. Necessidades profissionais e dispositivos especiais exigem avaliação.",
+    "content": "Na demonstração, a rede chama-se AuraGuest. O acesso utiliza o sobrenome do responsável pela reserva e o número da acomodação. Em falha simples, esquecer a rede e reconectar pode ajudar. Problemas persistentes são encaminhados à TI sem solicitar senhas pessoais. Acesso à internet não garante velocidade, cobertura integral ou compatibilidade com VPN.",
     "language": "pt-BR",
     "status": "active",
     "version": 2,
     "audience": "guest",
     "department": "ti",
     "example_question": "Como conecto o Wi-Fi?",
-    "escalate_when": "Não garantir velocidade, cobertura integral ou compatibilidade com VPN. Necessidades profissionais e dispositivos especiais exigem avaliação.",
+    "escalate_when": "Disponibilidade, identidade, valores finais e execução exigem confirmação da equipe. Dados demonstrativos não equivalem a oferta de empreendimento real.",
     "source_refs": [],
-    "origin": "proposta_autoral_para_piloto",
+    "origin": "modelo_comercial_ficticio_aura",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-08",
     "hotel_id": "aurora_grand_resort",
     "title": "Café da manhã",
-    "content": "O café da manhã demonstrativo é servido no Restaurante Aurora de segunda a sexta, das 06h30 às 10h30, e aos sábados, domingos e feriados, das 06h30 às 11h. A inclusão depende da tarifa contratada. Serviço no quarto e itens especiais não são automaticamente equivalentes ao buffet.\n\nCondicoes e excecoes: Saída antes da abertura pode solicitar alternativa, sujeita à operação. Alergias devem ser avaliadas pela cozinha antes do consumo.",
+    "content": "O café da manhã demonstrativo é servido no Restaurante Brisa de segunda a sexta, das 06h30 às 10h30, e aos sábados, domingos e feriados, das 06h30 às 11h. O buffet inclui pães, frutas, preparações quentes e bebidas não alcoólicas de café da manhã. A inclusão depende da tarifa contratada. Para visitante autorizado, o valor de referência é R$ 85 por adulto, sujeito a disponibilidade e confirmação. Serviço no quarto não está incluído automaticamente. Alergias e dietas específicas precisam de avaliação da cozinha.",
     "language": "pt-BR",
     "status": "active",
     "version": 2,
     "audience": "guest",
     "department": "alimentos_bebidas",
     "example_question": "Até que horas vai o café da manhã?",
-    "escalate_when": "Saída antes da abertura pode solicitar alternativa, sujeita à operação. Alergias devem ser avaliadas pela cozinha antes do consumo.",
+    "escalate_when": "Disponibilidade, identidade, valores finais e execução exigem confirmação da equipe. Dados demonstrativos não equivalem a oferta de empreendimento real.",
     "source_refs": [],
-    "origin": "proposta_autoral_para_piloto",
+    "origin": "modelo_comercial_ficticio_aura",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-09",
     "hotel_id": "aurora_grand_resort",
     "title": "Restaurantes e acesso às refeições",
-    "content": "Cada restaurante tem conceito, programação e condições de acesso próprios. O plano contratado determina inclusões; especialidades, bebidas premium e experiências privadas podem ter cobrança adicional. Confirmar necessidade de reserva, disponibilidade e valores antes de aceitar um pedido.\n\nCondicoes e excecoes: Mesa vazia não garante atendimento imediato. Fechamentos operacionais devem ser comunicados com alternativas realmente disponíveis.",
+    "content": "Restaurante Brisa: café da manhã conforme POL-08, almoço das 12h às 15h e jantar das 19h às 22h30. Restaurante Terra: cozinha autoral, terça a domingo, das 19h às 23h, mediante reserva; menu demonstrativo a partir de R$ 180 por pessoa, bebidas à parte. Bar Horizonte: das 10h às 22h, com bebidas e refeições leves. O plano da reserva determina as inclusões. Terra, bebidas premium e experiências privadas são adicionais, salvo confirmação expressa. Horários e valores são demonstrativos; mesa, serviço e cobrança dependem de confirmação.",
     "language": "pt-BR",
     "status": "active",
     "version": 2,
     "audience": "guest",
     "department": "alimentos_bebidas",
     "example_question": "Todos os restaurantes estão incluídos?",
-    "escalate_when": "Mesa vazia não garante atendimento imediato. Fechamentos operacionais devem ser comunicados com alternativas realmente disponíveis.",
+    "escalate_when": "Disponibilidade, identidade, valores finais e execução exigem confirmação da equipe. Dados demonstrativos não equivalem a oferta de empreendimento real.",
     "source_refs": [],
-    "origin": "proposta_autoral_para_piloto",
+    "origin": "modelo_comercial_ficticio_aura",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-10",
@@ -198,26 +196,26 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-11",
     "hotel_id": "aurora_grand_resort",
     "title": "Room service e entrega no quarto",
-    "content": "Room service depende do menu e da operação disponíveis. Itens, taxa, forma de cobrança e previsão devem ser apresentados antes da confirmação. O registro da solicitação não significa que o preparo começou. A entrega respeita autorização de acesso e identificação da acomodação.\n\nCondicoes e excecoes: Indisponibilidade ou alteração de preço exige novo aceite. Recolhimento de bandejas deve ser solicitado à equipe, sem obstruir rotas de circulação.",
+    "content": "O room service demonstrativo atende 24 horas: menu principal das 06h às 23h e seleção reduzida das 23h às 06h. Exemplos: sanduíche natural R$ 32, massa do dia R$ 48 e café da manhã individual R$ 65. Taxa de entrega demonstrativa: R$ 15 por pedido. O serviço não integra automaticamente o buffet nem o all-inclusive. A equipe confirma itens, total e previsão antes do aceite; registrar pedido não significa preparo iniciado. Não há prazo fixo de entrega garantido.",
     "language": "pt-BR",
     "status": "active",
     "version": 2,
     "audience": "guest",
     "department": "alimentos_bebidas",
     "example_question": "Posso pedir jantar no quarto?",
-    "escalate_when": "Indisponibilidade ou alteração de preço exige novo aceite. Recolhimento de bandejas deve ser solicitado à equipe, sem obstruir rotas de circulação.",
+    "escalate_when": "Disponibilidade, identidade, valores finais e execução exigem confirmação da equipe. Dados demonstrativos não equivalem a oferta de empreendimento real.",
     "source_refs": [],
-    "origin": "proposta_autoral_para_piloto",
+    "origin": "modelo_comercial_ficticio_aura",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-12",
@@ -234,8 +232,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-13",
@@ -252,26 +250,26 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-14",
     "hotel_id": "aurora_grand_resort",
-    "title": "Aurora Wellness Spa",
-    "content": "No piloto, o Aurora Wellness Spa funciona das 09:00 às 21:00. A oferta inclui massagens, tratamentos faciais, hidroterapia, sauna e experiências para casal, mediante disponibilidade e reserva. Serviço, duração e preço são confirmados antes da contratação.\n\nCondicoes e excecoes: Cancelamentos com menos de 6 horas podem gerar cobrança conforme a modalidade contratada no piloto. Adequação de tratamento e condições de saúde são avaliadas pela equipe especializada.",
+    "title": "Aura Wellness Spa",
+    "content": "O Aura Wellness Spa funciona das 09:00 às 21:00. Catálogo demonstrativo: massagem de relaxamento de 60 minutos por R$ 280, cuidado facial de 50 minutos por R$ 240 e sessão de sauna de 45 minutos por R$ 90. Tratamentos para casal são cotados pela equipe. Todos exigem confirmação de disponibilidade, profissional e condições de participação. Nenhum benefício terapêutico é garantido. Cancelamentos com menos de 6 horas seguem a condição informada antes da contratação; o chat não aplica cobranças automaticamente.",
     "language": "pt-BR",
     "status": "active",
     "version": 2,
     "audience": "guest",
     "department": "spa",
     "example_question": "Qual é o horário do spa?",
-    "escalate_when": "Cancelamentos com menos de 6 horas podem gerar cobrança conforme a modalidade contratada no piloto. Adequação de tratamento e condições de saúde são avaliadas pela equipe especializada.",
+    "escalate_when": "Disponibilidade, identidade, valores finais e execução exigem confirmação da equipe. Dados demonstrativos não equivalem a oferta de empreendimento real.",
     "source_refs": [],
-    "origin": "proposta_autoral_para_piloto",
+    "origin": "modelo_comercial_ficticio_aura",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-15",
@@ -288,122 +286,116 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-16",
     "hotel_id": "aurora_grand_resort",
     "title": "Kids Club e retirada de crianças",
-    "content": "A participação depende da faixa etária da atividade, capacidade e identificação do responsável. Registrar quem pode retirar a criança e como localizar a família. A programação deve esclarecer se há acompanhamento por monitores ou presença obrigatória do responsável.\n\nCondicoes e excecoes: Kids Club não equivale a babá individual. Necessidades específicas, indisposição ou mudança de responsável exigem avaliação antes da participação.",
+    "content": "O Kids Club demonstrativo funciona das 09h às 18h para crianças de 4 a 12 anos, com atividades recreativas programadas. Cadastro do responsável e contatos de emergência são conferidos presencialmente. A retirada ocorre somente por pessoa autorizada. Menores de 4 anos precisam de acompanhamento e atividade adequada; o espaço não equivale a serviço individual de babá. Lotação e participação são confirmadas pela equipe.",
     "language": "pt-BR",
     "status": "active",
     "version": 2,
     "audience": "guest",
     "department": "recreacao",
     "example_question": "Quem pode buscar meu filho no Kids Club?",
-    "escalate_when": "Kids Club não equivale a babá individual. Necessidades específicas, indisposição ou mudança de responsável exigem avaliação antes da participação.",
-    "source_refs": [
-      "REF-04"
-    ],
-    "origin": "proposta_autoral_para_piloto",
+    "escalate_when": "Disponibilidade, identidade, valores finais e execução exigem confirmação da equipe. Dados demonstrativos não equivalem a oferta de empreendimento real.",
+    "source_refs": [],
+    "origin": "modelo_comercial_ficticio_aura",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-17",
     "hotel_id": "aurora_grand_resort",
     "title": "Teen Club e adolescentes",
-    "content": "A programação informa faixa etária, horários, regras de participação e supervisão. Atividades externas ou de maior risco exigem avaliação e autorizações aplicáveis. Equipamentos compartilhados devem ser usados conforme instrução da equipe e capacidade do espaço.\n\nCondicoes e excecoes: Participação anterior não autoriza toda atividade. Imagem, jogos online e contato com terceiros seguem regras próprias de consentimento e privacidade.",
+    "content": "O Teen Club demonstrativo atende adolescentes de 13 a 17 anos, das 14h às 22h, com jogos e atividades supervisionadas conforme programação. O responsável autoriza a participação; saídas e atividades externas seguem conferência da equipe. O espaço não garante acompanhamento individual ou disponibilidade de todas as atividades.",
     "language": "pt-BR",
     "status": "active",
     "version": 2,
     "audience": "guest",
     "department": "recreacao",
     "example_question": "Meu filho pode participar sozinho?",
-    "escalate_when": "Participação anterior não autoriza toda atividade. Imagem, jogos online e contato com terceiros seguem regras próprias de consentimento e privacidade.",
-    "source_refs": [
-      "REF-04"
-    ],
-    "origin": "proposta_autoral_para_piloto",
+    "escalate_when": "Disponibilidade, identidade, valores finais e execução exigem confirmação da equipe. Dados demonstrativos não equivalem a oferta de empreendimento real.",
+    "source_refs": [],
+    "origin": "modelo_comercial_ficticio_aura",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-18",
     "hotel_id": "aurora_grand_resort",
     "title": "Animais de estimação",
-    "content": "No piloto, pets são aceitos em categorias selecionadas com reserva prévia: até 2 animais por acomodação e até 15 kg cada. O tutor supervisiona o animal e recolhe resíduos. Pets não acessam piscinas, spa, academia, buffet ou Kids Club.\n\nCondicoes e excecoes: Valores são confirmados antes da reserva. Cães-guia e animais de assistência não devem ser automaticamente tratados como pets; ver POL-63.",
+    "content": "Pets são aceitos no modelo nas categorias Aura Jardim e Villa Serenidade, mediante reserva prévia: até 2 animais por acomodação e até 15 kg cada. Adicional demonstrativo de R$ 120 por animal por diária, sujeito a aceite na reserva. O tutor supervisiona e recolhe resíduos. Pets não acessam piscinas, spa, academia, buffet ou Kids Club. Cães-guia e animais de assistência seguem análise específica de acesso e não recebem automaticamente as regras ou taxas de pets.",
     "language": "pt-BR",
     "status": "active",
     "version": 2,
     "audience": "guest",
     "department": "recepcao",
     "example_question": "Posso levar meu cachorro?",
-    "escalate_when": "Valores são confirmados antes da reserva. Cães-guia e animais de assistência não devem ser automaticamente tratados como pets; ver POL-63.",
-    "source_refs": [
-      "REF-02"
-    ],
-    "origin": "proposta_autoral_para_piloto",
+    "escalate_when": "Disponibilidade, identidade, valores finais e execução exigem confirmação da equipe. Dados demonstrativos não equivalem a oferta de empreendimento real.",
+    "source_refs": [],
+    "origin": "modelo_comercial_ficticio_aura",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-19",
     "hotel_id": "aurora_grand_resort",
     "title": "Estacionamento e valet",
-    "content": "No piloto, há estacionamento incluído para um veículo por acomodação e operação de valet prevista 24 horas. Entrega e retirada seguem registro da equipe. Informar previamente necessidade de acessibilidade ou dimensões especiais do veículo.\n\nCondicoes e excecoes: Visitantes, veículos adicionais e extras dependem de disponibilidade e tarifa. Não prometer vaga coberta, seguro adicional ou condições de responsabilidade sem confirmação.",
+    "content": "No modelo, o estacionamento inclui um veículo por acomodação e valet 24 horas. Segundo veículo: referência de R$ 40 por diária; visitante autorizado: R$ 60 por período de até 12 horas. Extras dependem de vagas, registro e aceite do valor. Não há garantia de vaga coberta ou disponibilidade para dimensões especiais. A equipe confere entrega e retirada do veículo.",
     "language": "pt-BR",
     "status": "active",
     "version": 2,
     "audience": "guest",
     "department": "recepcao",
     "example_question": "Posso estacionar dois carros?",
-    "escalate_when": "Visitantes, veículos adicionais e extras dependem de disponibilidade e tarifa. Não prometer vaga coberta, seguro adicional ou condições de responsabilidade sem confirmação.",
+    "escalate_when": "Disponibilidade, identidade, valores finais e execução exigem confirmação da equipe. Dados demonstrativos não equivalem a oferta de empreendimento real.",
     "source_refs": [],
-    "origin": "proposta_autoral_para_piloto",
+    "origin": "modelo_comercial_ficticio_aura",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-20",
     "hotel_id": "aurora_grand_resort",
     "title": "Transfers e transporte",
-    "content": "Transfer exige confirmação de trajeto, data, passageiros, bagagem, ponto de encontro e preço. Número do voo auxilia o planejamento, mas acompanhamento de atraso precisa estar previsto. Assentos infantis e veículos acessíveis devem ser solicitados antes da contratação.\n\nCondicoes e excecoes: Mudança de aeroporto ou chegada fora da janela contratada exige revalidação. Não confirmar motorista ou pagamento sem aceite do prestador.",
+    "content": "O traslado demonstrativo Aeroporto Modelo Costa Serena–hotel tem referência de R$ 180 por trecho em veículo para até 3 passageiros, sujeito ao volume de bagagem. O aeroporto e o trajeto são fictícios. Outros veículos e horários são cotados pelo prestador. Informe data, voo, pessoas, bagagem e necessidades de acessibilidade ou assento infantil. A equipe confirma motorista, ponto de encontro, total e condições; não há reserva ou pagamento automático.",
     "language": "pt-BR",
     "status": "active",
     "version": 2,
     "audience": "guest",
     "department": "concierge",
     "example_question": "Vocês buscam no aeroporto?",
-    "escalate_when": "Mudança de aeroporto ou chegada fora da janela contratada exige revalidação. Não confirmar motorista ou pagamento sem aceite do prestador.",
+    "escalate_when": "Disponibilidade, identidade, valores finais e execução exigem confirmação da equipe. Dados demonstrativos não equivalem a oferta de empreendimento real.",
     "source_refs": [],
-    "origin": "proposta_autoral_para_piloto",
+    "origin": "modelo_comercial_ficticio_aura",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-21",
     "hotel_id": "aurora_grand_resort",
     "title": "Limpeza e arrumação",
-    "content": "A limpeza segue a programação e os pedidos registrados. O hóspede pode informar preferência de horário, reposição necessária e restrição de entrada. A equipe verifica disponibilidade e autorização de acesso antes do atendimento. A previsão só é comunicada quando confirmada pela governança.\n\nCondicoes e excecoes: Urgência solicitada não significa execução imediata. Sinalização de privacidade segue POL-51; situação de risco exige procedimento de segurança.",
+    "content": "A arrumação demonstrativa ocorre entre 09h e 17h, respeitando autorização de acesso e a sinalização de não perturbe. O hóspede pode solicitar preferência de horário; a governança confirma conforme a operação. Pedidos de limpeza, reposição ou coleta são registrados e acompanhados, sem promessa de prazo antes de a equipe avaliar.",
     "language": "pt-BR",
     "status": "active",
     "version": 2,
     "audience": "guest",
     "department": "governanca",
     "example_question": "Podem limpar depois do almoço?",
-    "escalate_when": "Urgência solicitada não significa execução imediata. Sinalização de privacidade segue POL-51; situação de risco exige procedimento de segurança.",
+    "escalate_when": "Disponibilidade, identidade, valores finais e execução exigem confirmação da equipe. Dados demonstrativos não equivalem a oferta de empreendimento real.",
     "source_refs": [],
-    "origin": "proposta_autoral_para_piloto",
+    "origin": "modelo_comercial_ficticio_aura",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-22",
@@ -420,8 +412,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-23",
@@ -438,8 +430,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-24",
@@ -456,8 +448,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-25",
@@ -476,8 +468,8 @@
     ],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-26",
@@ -494,8 +486,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-27",
@@ -512,8 +504,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-28",
@@ -530,8 +522,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-29",
@@ -548,8 +540,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-30",
@@ -566,8 +558,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-31",
@@ -584,8 +576,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-32",
@@ -602,8 +594,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-33",
@@ -620,8 +612,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-34",
@@ -638,8 +630,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-35",
@@ -658,8 +650,8 @@
     ],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-36",
@@ -676,8 +668,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-37",
@@ -694,8 +686,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-38",
@@ -712,8 +704,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-39",
@@ -730,8 +722,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-40",
@@ -750,8 +742,8 @@
     ],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-41",
@@ -770,8 +762,8 @@
     ],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-42",
@@ -788,8 +780,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-43",
@@ -806,8 +798,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-44",
@@ -826,8 +818,8 @@
     ],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-45",
@@ -846,8 +838,8 @@
     ],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-46",
@@ -864,8 +856,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-47",
@@ -884,8 +876,8 @@
     ],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-48",
@@ -905,26 +897,26 @@
     ],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-49",
     "hotel_id": "aurora_grand_resort",
     "title": "Guarda de bagagem",
-    "content": "Guardar volumes depende de espaço, identificação e comprovante da equipe. Registrar quantidade e orientação de retirada. Itens valiosos, frágeis ou especiais devem ser informados antes do depósito.\n\nCondicoes e excecoes: Prazo, eventual custo e restrições precisam ser confirmados. Não prometer guarda de produtos perigosos, perecíveis ou volumes sem responsável.",
+    "content": "A guarda de bagagem demonstrativa fica junto à recepção, com atendimento 24 horas e identificação por comprovante. É oferecida sem adicional no dia da chegada e da saída, para hóspedes com reserva conferida. Objetos de valor e itens especiais exigem orientação presencial. A equipe confirma espaço, identificação e retirada; o chat não autoriza entrega a terceiros.",
     "language": "pt-BR",
     "status": "active",
     "version": 2,
     "audience": "guest",
     "department": "mensageria",
     "example_question": "Posso deixar as malas após o check-out?",
-    "escalate_when": "Prazo, eventual custo e restrições precisam ser confirmados. Não prometer guarda de produtos perigosos, perecíveis ou volumes sem responsável.",
+    "escalate_when": "Disponibilidade, identidade, valores finais e execução exigem confirmação da equipe. Dados demonstrativos não equivalem a oferta de empreendimento real.",
     "source_refs": [],
-    "origin": "proposta_autoral_para_piloto",
+    "origin": "modelo_comercial_ficticio_aura",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-50",
@@ -941,8 +933,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-51",
@@ -959,80 +951,80 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-52",
     "hotel_id": "aurora_grand_resort",
     "title": "Troca de enxoval e toalhas",
-    "content": "O hóspede pode solicitar reposição de toalhas, lençóis e itens de higiene. A equipe confirma quantidade e necessidade, considerando ocupação e estoque. Programas de reutilização devem ser explicados, sem impedir troca necessária por sujeira ou condição de uso.\n\nCondicoes e excecoes: Não cobrar por reposição comum sem regra aprovada. Dano alegado exige avaliação e não pode ser tratado automaticamente como consumo.",
+    "content": "Toalhas de banho adicionais podem ser solicitadas à governança sem adicional no modelo. Informe a quantidade desejada; a equipe verifica disponibilidade e hospedagem antes da entrega. O registro gera protocolo, não confirmação de entrega. O hóspede pode consultar o status e confirmar recebimento. Quantidades especiais e troca de enxoval são avaliadas pela equipe, sem prazo fixo prometido.",
     "language": "pt-BR",
     "status": "active",
     "version": 2,
     "audience": "guest",
     "department": "governanca",
     "example_question": "Preciso de toalhas limpas.",
-    "escalate_when": "Não cobrar por reposição comum sem regra aprovada. Dano alegado exige avaliação e não pode ser tratado automaticamente como consumo.",
+    "escalate_when": "Disponibilidade, identidade, valores finais e execução exigem confirmação da equipe. Dados demonstrativos não equivalem a oferta de empreendimento real.",
     "source_refs": [],
-    "origin": "proposta_autoral_para_piloto",
+    "origin": "modelo_comercial_ficticio_aura",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-53",
     "hotel_id": "aurora_grand_resort",
     "title": "Lavanderia e passadoria",
-    "content": "Peças são recebidas com identificação, quantidade e instruções de cuidado. Informar preço, prazo e restrições antes do aceite. Etiqueta e condição do tecido orientam o serviço. O hóspede deve informar peça delicada, mancha ou valor especial antes da coleta.\n\nCondicoes e excecoes: Serviço expresso só pode ser prometido após confirmação. Peça sem instrução, dano prévio ou tratamento incompatível exige alinhamento específico.",
+    "content": "Lavanderia demonstrativa: camisa R$ 18, calça R$ 25 e vestido simples R$ 35 por peça. Peças delicadas, passadoria e serviço expresso são cotados separadamente. A equipe confere etiqueta, estado, total e prazo antes do aceite. O valor não integra automaticamente a diária ou o all-inclusive. Não prometer devolução no mesmo dia sem confirmação.",
     "language": "pt-BR",
     "status": "active",
     "version": 2,
     "audience": "guest",
     "department": "governanca",
     "example_question": "Consigo lavar uma camisa para amanhã?",
-    "escalate_when": "Serviço expresso só pode ser prometido após confirmação. Peça sem instrução, dano prévio ou tratamento incompatível exige alinhamento específico.",
+    "escalate_when": "Disponibilidade, identidade, valores finais e execução exigem confirmação da equipe. Dados demonstrativos não equivalem a oferta de empreendimento real.",
     "source_refs": [],
-    "origin": "proposta_autoral_para_piloto",
+    "origin": "modelo_comercial_ficticio_aura",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-54",
     "hotel_id": "aurora_grand_resort",
     "title": "Minibar e reposição",
-    "content": "Minibar pode ter itens cobrados separadamente do plano de alimentação. A tabela aplicável deve estar disponível e o consumo registrado para conferência. Solicitações de retirada, reposição ou adaptação são encaminhadas à equipe.\n\nCondicoes e excecoes: Pacote all-inclusive não inclui automaticamente todo produto do minibar. Cobrança contestada deve ser verificada antes de manter o lançamento.",
+    "content": "O minibar é um consumo adicional no modelo: água de 500 ml R$ 8, refrigerante de 350 ml R$ 10 e snack individual R$ 12. O preço aplicável é o informado no cardápio conferido da acomodação. O minibar não integra automaticamente o all-inclusive. Reposição e divergências de consumo são conferidas pela equipe; o chat não confirma débito.",
     "language": "pt-BR",
     "status": "active",
     "version": 2,
     "audience": "guest",
     "department": "alimentos_bebidas",
     "example_question": "O minibar está incluído na minha diária?",
-    "escalate_when": "Pacote all-inclusive não inclui automaticamente todo produto do minibar. Cobrança contestada deve ser verificada antes de manter o lançamento.",
+    "escalate_when": "Disponibilidade, identidade, valores finais e execução exigem confirmação da equipe. Dados demonstrativos não equivalem a oferta de empreendimento real.",
     "source_refs": [],
-    "origin": "proposta_autoral_para_piloto",
+    "origin": "modelo_comercial_ficticio_aura",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-55",
     "hotel_id": "aurora_grand_resort",
     "title": "Berço, cama extra e itens infantis",
-    "content": "Berço, cama adicional, banheira e outros itens dependem de disponibilidade e compatibilidade com a categoria. Registrar idade e necessidade funcional para confirmar equipamento e montagem. Informar eventual cobrança antes de aceitar.\n\nCondicoes e excecoes: Equipamento não amplia a ocupação permitida. Não prometer grade ou berço improvisado; montagem deve ser feita conforme orientação do fabricante e da equipe.",
+    "content": "Berço é disponibilizado sem adicional no modelo, mediante solicitação e confirmação de estoque. Cama extra tem referência de R$ 150 por diária e só pode ser oferecida em categoria cuja capacidade permita. A categoria Aura Superior e a Suíte Horizonte não recebem ocupantes acima do limite cadastrado. Itens infantis e adequação do berço são conferidos presencialmente; não há reserva automática pelo chat.",
     "language": "pt-BR",
     "status": "active",
     "version": 2,
     "audience": "guest",
     "department": "governanca",
     "example_question": "Vocês disponibilizam berço?",
-    "escalate_when": "Equipamento não amplia a ocupação permitida. Não prometer grade ou berço improvisado; montagem deve ser feita conforme orientação do fabricante e da equipe.",
+    "escalate_when": "Disponibilidade, identidade, valores finais e execução exigem confirmação da equipe. Dados demonstrativos não equivalem a oferta de empreendimento real.",
     "source_refs": [],
-    "origin": "proposta_autoral_para_piloto",
+    "origin": "modelo_comercial_ficticio_aura",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-56",
@@ -1049,8 +1041,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-57",
@@ -1069,8 +1061,8 @@
     ],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-58",
@@ -1087,8 +1079,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-59",
@@ -1105,8 +1097,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-60",
@@ -1123,8 +1115,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-61",
@@ -1143,8 +1135,8 @@
     ],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-62",
@@ -1161,8 +1153,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-63",
@@ -1179,8 +1171,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-64",
@@ -1197,26 +1189,26 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-65",
     "hotel_id": "aurora_grand_resort",
     "title": "Plano all-inclusive e exceções",
-    "content": "O pacote deve discriminar refeições, bebidas, horários, locais e serviços incluídos. Experiências especiais, produtos premium e serviços de terceiros podem ficar fora da cobertura. Informar a condição exata contratada antes de orientar consumo.\n\nCondicoes e excecoes: Não usar o termo all-inclusive como garantia de tudo gratuito ou disponível 24 horas. Divergência entre oferta e cobrança exige análise do documento da reserva.",
+    "content": "O catálogo demonstrativo oferece Aura Essencial (hospedagem e café da manhã), Aura Sabores (café da manhã e jantar buffet no Brisa, bebidas adicionais) e Aura Inclusive (café, almoço e jantar no Brisa e bebidas selecionadas no Bar Horizonte das 10h às 22h). Restaurante Terra, bebidas premium, room service, minibar, spa, lavanderia, traslados e taxa de pet ficam fora desses planos, salvo confirmação expressa na reserva. O pacote contratado prevalece; all-inclusive não significa todos os serviços gratuitos ou disponíveis 24 horas.",
     "language": "pt-BR",
     "status": "active",
     "version": 2,
     "audience": "guest",
     "department": "reservas",
     "example_question": "O all-inclusive inclui spa e bebidas premium?",
-    "escalate_when": "Não usar o termo all-inclusive como garantia de tudo gratuito ou disponível 24 horas. Divergência entre oferta e cobrança exige análise do documento da reserva.",
+    "escalate_when": "Disponibilidade, identidade, valores finais e execução exigem confirmação da equipe. Dados demonstrativos não equivalem a oferta de empreendimento real.",
     "source_refs": [],
-    "origin": "proposta_autoral_para_piloto",
+    "origin": "modelo_comercial_ficticio_aura",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-66",
@@ -1233,8 +1225,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-67",
@@ -1251,8 +1243,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-68",
@@ -1269,8 +1261,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-69",
@@ -1287,8 +1279,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-70",
@@ -1305,8 +1297,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-71",
@@ -1323,8 +1315,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-72",
@@ -1341,8 +1333,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-73",
@@ -1359,8 +1351,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-74",
@@ -1377,8 +1369,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-75",
@@ -1395,8 +1387,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-76",
@@ -1413,8 +1405,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-77",
@@ -1431,8 +1423,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-78",
@@ -1449,8 +1441,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-79",
@@ -1467,8 +1459,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-80",
@@ -1485,8 +1477,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-81",
@@ -1503,8 +1495,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-82",
@@ -1523,8 +1515,8 @@
     ],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-83",
@@ -1541,8 +1533,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-84",
@@ -1561,8 +1553,8 @@
     ],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-85",
@@ -1579,8 +1571,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-86",
@@ -1597,8 +1589,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-87",
@@ -1615,8 +1607,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-88",
@@ -1633,8 +1625,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-89",
@@ -1651,28 +1643,26 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-90",
     "hotel_id": "aurora_grand_resort",
     "title": "Taxas e itens não incluídos",
-    "content": "Taxa de serviço, turismo, estacionamento ou outro adicional só deve ser apresentado conforme informação aplicável à reserva e ao local. Descrever base de cobrança, período e inclusões antes do consumo ou confirmação quando cabível.\n\nCondicoes e excecoes: Não importar valores de hotéis de referência nem criar taxa genérica. Divergência sobre cobrança obrigatória ou divulgação deve ser analisada pela equipe competente.",
+    "content": "Neste modelo demonstrativo, cada serviço adicional informa seu preço de referência na política correspondente. Estacionamento de um veículo e toalhas de banho adicionais não geram adicional; segundo veículo, visitantes, minibar, room service, spa e pets seguem condições próprias. Não existe uma taxa genérica criada pelo chat. Tributos e condições de cobrança devem ser definidos e revisados pelo hotel real antes de ativar seu catálogo. A equipe apresenta o total aplicável antes de confirmar o consumo.",
     "language": "pt-BR",
     "status": "active",
     "version": 2,
     "audience": "guest",
     "department": "financeiro",
     "example_question": "Existe alguma taxa além da diária?",
-    "escalate_when": "Não importar valores de hotéis de referência nem criar taxa genérica. Divergência sobre cobrança obrigatória ou divulgação deve ser analisada pela equipe competente.",
-    "source_refs": [
-      "REF-01"
-    ],
-    "origin": "proposta_autoral_para_piloto",
+    "escalate_when": "Disponibilidade, identidade, valores finais e execução exigem confirmação da equipe. Dados demonstrativos não equivalem a oferta de empreendimento real.",
+    "source_refs": [],
+    "origin": "modelo_comercial_ficticio_aura",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-91",
@@ -1689,8 +1679,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-92",
@@ -1707,8 +1697,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-93",
@@ -1725,8 +1715,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-94",
@@ -1743,8 +1733,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-95",
@@ -1761,8 +1751,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-96",
@@ -1779,8 +1769,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-97",
@@ -1797,8 +1787,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-98",
@@ -1817,8 +1807,8 @@
     ],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-99",
@@ -1835,8 +1825,8 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   },
   {
     "id": "POL-100",
@@ -1853,7 +1843,7 @@
     "source_refs": [],
     "origin": "proposta_autoral_para_piloto",
     "deployment_scope": "hotel_ficticio",
-    "real_hotel_approval": "pendente",
-    "reviewed_on": "2026-09-15"
+    "real_hotel_approval": "demonstrativa",
+    "reviewed_on": "2026-09-17"
   }
 ]

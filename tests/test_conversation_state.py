@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from datetime import timedelta
 from pathlib import Path
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 import app
 import conversation_state as state
 
@@ -38,6 +38,17 @@ class ConversationTests(unittest.TestCase):
         app.init_db()
         self.assertEqual(send(None)['delivery_status'],'sent')
         self.assertEqual(transport.call_count,1)
+
+    def test_named_waha_session_is_used_for_delivery(self):
+        app.handle_message(self.body())
+        root=Path(self.tmp.name)
+        (root/'runtime/waha').mkdir(parents=True)
+        (root/'runtime/waha/session.json').write_text('{"name":"Lume"}')
+        transport=Mock(return_value='named-session-message')
+        with patch.object(state,'ROOT',root):
+            result=state.deliver(app.connection,'context-0001',self.session,transport)
+        self.assertEqual(result['delivery_status'],'sent')
+        self.assertEqual(transport.call_args.args[0]['session'],'Lume')
 
     def test_timeout_is_never_automatically_retried(self):
         app.handle_message(self.body())

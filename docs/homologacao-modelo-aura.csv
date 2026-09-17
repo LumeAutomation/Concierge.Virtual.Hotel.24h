@@ -1,0 +1,102 @@
+﻿codigo;assunto;departamento;visibilidade;pergunta_referencia;status_modelo;dados_reais_confirmados;fonte_do_hotel;responsavel_do_hotel;data_conferencia;revisao_publicada;resultado_teste_real;observacoes
+POL-00;Apresentação e boas-vindas;recepcao;guest;Olá;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-01;Identidade do hotel;recepcao;guest;Onde fica o resort?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-02;Autoridade e limites da assistente;gerencia;internal;Pode aprovar um upgrade para mim?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-03;Atendimento e continuidade entre equipes;recepcao;internal;Prefiro falar com uma pessoa.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-04;Check-in e check-out padrão;recepcao;guest;Quais são os horários de entrada e saída?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-05;Identificação e coleta mínima de dados;recepcao;internal;Esqueci a chave, pode liberar meu quarto?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-06;Categorias e características das acomodações;reservas;guest;Minha categoria tem varanda?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-07;Wi-Fi e suporte de conexão;ti;guest;Como conecto o Wi-Fi?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-08;Café da manhã;alimentos_bebidas;guest;Até que horas vai o café da manhã?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-09;Restaurantes e acesso às refeições;alimentos_bebidas;guest;Todos os restaurantes estão incluídos?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-10;Alergias e intolerâncias alimentares;alimentos_bebidas;guest;Tenho alergia a amendoim, o que posso comer?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-11;Room service e entrega no quarto;alimentos_bebidas;guest;Posso pedir jantar no quarto?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-12;Piscinas e horários;recreacao;guest;Qual piscina posso usar com crianças?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-13;Praia e condições do mar;recreacao;guest;Hoje é seguro entrar no mar?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-14;Aura Wellness Spa;spa;guest;Qual é o horário do spa?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-15;Academia e equipamentos;recreacao;guest;Posso usar a academia à noite?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-16;Kids Club e retirada de crianças;recreacao;guest;Quem pode buscar meu filho no Kids Club?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-17;Teen Club e adolescentes;recreacao;guest;Meu filho pode participar sozinho?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-18;Animais de estimação;recepcao;guest;Posso levar meu cachorro?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-19;Estacionamento e valet;recepcao;guest;Posso estacionar dois carros?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-20;Transfers e transporte;concierge;guest;Vocês buscam no aeroporto?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-21;Limpeza e arrumação;governanca;guest;Podem limpar depois do almoço?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-22;Manutenção na acomodação;manutencao;guest;O ar-condicionado não funciona.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-23;Emergências;seguranca;internal;Há uma pessoa passando mal na piscina.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-24;Acesso aos quartos e emissão de chaves;seguranca;internal;Qual é o quarto de uma pessoa hospedada?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-25;Achados e perdidos;governanca;guest;Esqueci um carregador no quarto.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-26;Reclamações e recuperação do atendimento;relacionamento;internal;Pedi limpeza duas vezes e ninguém veio.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-27;Compensações e cortesias;gerencia;internal;Quero uma diária grátis pelo problema.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-28;Reserva e disponibilidade;reservas;guest;Há quarto disponível no feriado?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-29;Cancelamento de hospedagem;reservas;guest;Se cancelar hoje, há multa?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-30;No-show e ausência na chegada;reservas;guest;Meu voo atrasou e só chego amanhã.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-31;Crianças na reserva;reservas;guest;Meu filho paga hospedagem?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-32;Visitantes não hospedados;recepcao;guest;Um amigo pode passar a tarde comigo?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-33;Eventos corporativos e sociais;eventos;guest;Posso organizar uma reunião no hotel?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-34;Casamentos e celebrações;eventos;guest;Vocês fazem casamento na praia?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-35;VIPs e relacionamento;relacionamento;guest;Sou cliente frequente, tenho upgrade?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-36;Prioridades e prazos internos;gerencia;internal;Quanto tempo demora a manutenção?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-37;Estados de solicitação;recepcao;internal;Meu pedido foi encerrado sem atendimento.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-38;Informação ausente e antialucinação;gerencia;internal;Qual o preço de um serviço sem tabela?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-39;Vigência e hierarquia das fontes;gerencia;internal;O voucher informa outra condição.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-40;Early check-in;recepcao;guest;"Chego às 8h; posso entrar no quarto?";"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-41;Late check-out;recepcao;guest;Posso sair às 17h?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-42;Chegada de madrugada;recepcao;guest;Qual diária preciso para chegar de madrugada?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-43;Quarto atrasado na chegada;recepcao;guest;Passou do check-in e ainda estou esperando.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-44;Capacidade máxima;reservas;guest;Podem ficar mais duas pessoas no quarto?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-45;Quartos conjugados e próximos;reservas;guest;Quero quartos com porta de comunicação.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-46;Acessibilidade de acomodações;recepcao;guest;O banheiro tem barras e espaço para cadeira de rodas?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-47;Menores e documentação;recepcao;guest;"Minha sobrinha viajará comigo; o que apresentar?";"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-48;Pré-cadastro e FNRH;recepcao;guest;Posso adiantar meu cadastro?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-49;Guarda de bagagem;mensageria;guest;Posso deixar as malas após o check-out?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-50;Troca de acomodação;recepcao;guest;Posso mudar para um quarto silencioso?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-51;Não perturbe e privacidade no quarto;governanca;guest;A placa de não perturbe impede a limpeza?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-52;Troca de enxoval e toalhas;governanca;guest;Preciso de toalhas limpas.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-53;Lavanderia e passadoria;governanca;guest;Consigo lavar uma camisa para amanhã?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-54;Minibar e reposição;alimentos_bebidas;guest;O minibar está incluído na minha diária?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-55;Berço, cama extra e itens infantis;governanca;guest;Vocês disponibilizam berço?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-56;Objetos de valor e cofre;seguranca;guest;Esqueci o código do cofre.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-57;Fumo, vaporizadores e áreas permitidas;seguranca;guest;Posso fumar na varanda?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-58;Ruído e descanso;seguranca;guest;O quarto ao lado está fazendo muito barulho.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-59;Danos e cobrança de reparos;gerencia;guest;Estão cobrando um item que já estava quebrado.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-60;Dedetização e suspeita de pragas;governanca;guest;Encontrei insetos na cama.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-61;Adultos, crianças e áreas restritas;recreacao;guest;Uma criança pode entrar na área adults only?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-62;Babá e cuidado individual;concierge;guest;Posso contratar uma babá à noite?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-63;Cão-guia e animal de assistência;recepcao;guest;"Viajo com cão-guia; como funciona o acesso?";"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-64;Bem-estar de hóspedes com necessidades específicas;recepcao;guest;Preciso de um ambiente com menos estímulos.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-65;Plano all-inclusive e exceções;reservas;guest;O all-inclusive inclui spa e bebidas premium?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-66;Reservas em restaurantes;alimentos_bebidas;guest;Pode reservar uma mesa para oito pessoas?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-67;Traje e apresentação em restaurantes;alimentos_bebidas;guest;Posso almoçar com roupa de piscina?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-68;Bebidas alcoólicas e consumo responsável;alimentos_bebidas;guest;Posso levar bebidas do bar para a piscina?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-69;Alimentos externos e entregas;recepcao;guest;Posso pedir comida por aplicativo?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-70;Alimentação infantil e copa de apoio;alimentos_bebidas;guest;Onde posso aquecer a comida do bebê?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-71;Dietas vegetarianas, veganas e religiosas;alimentos_bebidas;guest;Há opções veganas no jantar?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-72;Bolos, aniversários e surpresas;relacionamento;guest;Vocês colocam um bolo no quarto?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-73;Toalhas de piscina e praia;recreacao;guest;Onde retiro toalhas para a piscina?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-74;Espreguiçadeiras e cabanas;recreacao;guest;Posso reservar cadeiras deixando uma toalha?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-75;Vidro, alimentos e conduta na piscina;recreacao;guest;Posso levar uma garrafa de vidro à piscina?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-76;Fechamento por clima ou manutenção;recreacao;guest;"A piscina fechou; quando reabre?";"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-77;Esportes aquáticos e equipamentos;recreacao;guest;Posso usar caiaque sem experiência?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-78;Passeios e prestadores externos;concierge;guest;Vocês vendem passeio de barco?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-79;Agendamento e atraso em tratamentos do spa;spa;guest;"Vou atrasar para a massagem; perco o horário?";"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-80;Sauna, hidroterapia e tratamentos;spa;guest;Gestante pode usar a sauna?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-81;Despertador e ligações de cortesia;recepcao;guest;Podem me acordar às cinco da manhã?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-82;Encomendas e correspondências;mensageria;guest;Posso enviar uma encomenda para o hotel?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-83;Recarga de veículos elétricos;manutencao;guest;Há carregador para carro elétrico?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-84;Pagamentos, caução e pré-autorização;financeiro;guest;Por que apareceu um bloqueio no cartão?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-85;Divisão de conta e cobrança a terceiros;financeiro;guest;A empresa paga a diária e eu pago os consumos.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-86;Nota fiscal e correção cadastral;financeiro;guest;Preciso corrigir o CNPJ da nota.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-87;Contestação de consumo;financeiro;guest;Há um consumo de minibar que não fiz.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-88;Reembolsos e prazos de processamento;financeiro;guest;Quando meu reembolso vai cair?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-89;Reserva feita por agência ou plataforma;reservas;guest;"Reservei pela agência; posso mudar as datas aqui?";"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-90;Taxas e itens não incluídos;financeiro;guest;Existe alguma taxa além da diária?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-91;Saída antecipada e extensão de estadia;reservas;guest;Quero ficar mais duas noites.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-92;Overbooking e indisponibilidade da categoria;gerencia;guest;Meu quarto confirmado não está disponível.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-93;Objetos perigosos e segurança patrimonial;seguranca;guest;Há um objeto perigoso em uma área comum.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-94;Criança ou pessoa desaparecida;seguranca;guest;Não encontro meu filho no resort.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-95;Assédio, discriminação e violência;seguranca;guest;Estou sendo ameaçada por outro hóspede.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-96;Privacidade, gravação e uso de imagem;relacionamento;guest;Posso obter uma gravação das câmeras?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-97;Drones e captação profissional;seguranca;guest;Posso voar um drone sobre a piscina?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-98;Sustentabilidade e consumo responsável;governanca;guest;Como funciona a reutilização de toalhas?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-99;Interrupção de energia, água ou sistemas;manutencao;guest;Acabou a energia e preciso de assistência.;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.
+POL-100;Controle de qualidade e revisão operacional;gerencia;internal;Quem aprova uma mudança nas regras do hotel?;"Catalogado; estrutura conferida; dados ficticios";NAO;;;;;;Revisao e aceite do hotel real pendentes.

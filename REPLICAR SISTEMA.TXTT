@@ -1,0 +1,14 @@
+**Sim. Podemos replicar toda a estrutura para outro hotel**, criando uma instalação independente e personalizando o modelo.
+
+O processo será:
+
+1. **Copiar a aplicação**, incluindo reservas, atendimento, políticas e painéis.
+2. **Criar um banco novo**, sem hóspedes, conversas ou reservas do Hotel Aura.
+3. **Importar o modelo** exportado em **Meu hotel → Baixar modelo do hotel**.
+4. **Personalizar a marca e revisar as políticas** com as informações reais do novo empreendimento.
+5. **Criar acessos e conectar o WhatsApp do cliente**, com credenciais próprias.
+6. **Validar a jornada completa** antes de colocar em operação.
+
+**A exportação disponível hoje leva identidade e políticas; ela não instala toda a aplicação automaticamente.** A implantação dos serviços, backups e conexão WhatsApp ainda exige configuração técnica.
+
+Para começar, recomendo um ambiente separado por hotel. Assim, uma alteração ou falha em um cliente não interfere nos demais, e os dados permanecem separados.

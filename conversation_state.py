@@ -1,10 +1,14 @@
 """Estado local de conversa e envio: uma tentativa automatica por mensagem."""
+import hotel_profile
+import operating_mode
 import json
 import re
 import sqlite3
+import secrets
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.request import Request, urlopen
+from waha_config import session_name
 
 ROOT=Path(__file__).resolve().parent
 
@@ -13,6 +17,7 @@ def utcnow(): return datetime.now(timezone.utc)
 def init_schema(connection):
     with connection() as db:
         db.executescript('''
+        CREATE TABLE IF NOT EXISTS public_protocols (internal_id TEXT PRIMARY KEY, code TEXT NOT NULL UNIQUE);
         CREATE TABLE IF NOT EXISTS conversation_contexts (
           request_id TEXT PRIMARY KEY, session_id TEXT NOT NULL, message TEXT NOT NULL,
           history TEXT NOT NULL, created_at TEXT NOT NULL);
@@ -28,8 +33,34 @@ def init_schema(connection):
             db.execute("INSERT OR IGNORE INTO whatsapp_deliveries(request_id,status,updated_at) SELECT id,'legacy_unverified',? FROM interactions WHERE session_id LIKE 'waha_%'",(utcnow().isoformat(),))
             db.execute("INSERT INTO schema_migrations(name) VALUES ('whatsapp_deliveries_v1')")
 
+
+def public_protocol(db, internal_id):
+    existing=db.execute('SELECT code FROM public_protocols WHERE internal_id=?',(internal_id,)).fetchone()
+    if existing:return existing[0]
+    for _ in range(100):
+        code='HA-'+str(secrets.randbelow(100000000)).zfill(8)
+        try:
+            db.execute('INSERT INTO public_protocols VALUES (?,?)',(internal_id,code))
+            return code
+        except sqlite3.IntegrityError:
+            existing=db.execute('SELECT code FROM public_protocols WHERE internal_id=?',(internal_id,)).fetchone()
+            if existing:return existing[0]
+    raise ValueError('Nao foi possivel gerar protocolo. Tente novamente.')
+
+
+def display_text(text):
+    # Presentation only; stored policies and technical identifiers are preserved.
+    text=text.replace('Sou a AURA, assistente virtual do Aurora Grand Resort & Spa','Sou a Hostess do Hotel Aura')
+    text=text.replace('Sou a AURA','Sou a Hostess do Hotel Aura').replace('Aurora Grand Resort & Spa','Hotel Aura')
+    text=re.sub(r'\bconcierge\b','Hostess',text,flags=re.I)
+    for old,new in [('Este piloto','Esta Jornada do Hóspede'),('neste piloto','nesta Jornada do Hóspede'),
+                    ('No piloto','Na Jornada do Hóspede'),('no piloto','na Jornada do Hóspede'),
+                    ('do piloto','da Jornada do Hóspede')]:text=text.replace(old,new)
+    return hotel_profile.brand(re.sub(r'\bpiloto\b','Jornada do Hóspede',text,flags=re.I))
+
+
 def is_followup(message):
-    return bool(re.match(r'^(?:e\b|aos domingos\b|no domingo\b|nesse caso\b|e nesse\b)',message.strip().lower()))
+    return bool(re.match(r'^(?:e\b|aos domingos\b|no domingo\b|nesse caso\b|e nesse\b|que horas\b|fecha\b|abre\b)',message.strip().lower()))
 
 def snapshot(connection,request_id,session_id,message,is_sensitive):
     now=utcnow(); cutoff=now-timedelta(minutes=30)
@@ -74,6 +105,15 @@ def deliver(connection,request_id,session_id,transport=None):
         if not row or row[0]!=session_id: raise ValueError('Resposta persistida nao pertence a conversa.')
         match=re.fullmatch(r'waha_(\d{6,20})_(c_us|lid)',session_id)
         result=json.loads(row[1])
+        if operating_mode.production():
+            import knowledge_engine
+            invalid=(result.get('mode')!='production' or result.get('mode_revision')!=operating_mode.get()['revision'])
+            if result.get('knowledge_version') and result['knowledge_version']!=knowledge_engine.load_base()[1]:invalid=True
+            if invalid:return {'request_id':request_id,'delivery_status':'blocked','duplicate':False,'needs_review':True}
+
+        human=db.execute('SELECT 1 FROM human_conversations WHERE session_id=?',(session_id,)).fetchone()
+        if result.get('suppress_response') or (human and result.get('route') not in ('STAFF_REPLY','SAFE_REPLY') and result.get('priority')!='urgent'):
+            return {'request_id':request_id,'delivery_status':'suppressed','duplicate':False,'needs_review':False}
         if not match or result.get('persisted') is not True or not isinstance(result.get('reply'),str) or not result['reply'].strip():
             raise ValueError('Resposta ou destino invalido.')
         existing=db.execute('SELECT status,updated_at FROM whatsapp_deliveries WHERE request_id=?',(request_id,)).fetchone()
@@ -85,8 +125,8 @@ def deliver(connection,request_id,session_id,transport=None):
             return {'request_id':request_id,'delivery_status':status,'duplicate':True,'needs_review':status=='unknown'}
         db.execute("INSERT INTO whatsapp_deliveries(request_id,status,updated_at) VALUES (?,'sending',?)",(request_id,now.isoformat()))
     chat_id=match[1]+('@c.us' if match[2]=='c_us' else '@lid')
-    payload={'session':'default','chatId':chat_id,'text':'AURA | Demonstracao\n\n'+result['reply'],'linkPreview':False}
     try:
+        payload={'session':session_name(ROOT),'chatId':chat_id,'text':hotel_profile.brand('Hostess do Hotel Aura')+'\n\n'+display_text(result['reply']),'linkPreview':False}
         provider_id=(transport or send_waha)(payload)
         if not provider_id: raise ValueError('Identificador de envio vazio.')
     except Exception as error:

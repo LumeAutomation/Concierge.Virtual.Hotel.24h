@@ -1,8 +1,9 @@
+const expectedSession = 'default';
 const output = [];
 for (const [index, item] of $input.all().entries()) {
   const event = item.json.body ?? item.json;
   const p = event.payload;
-  if (event.event !== 'message' || event.session !== 'default' || !p) continue;
+  if (event.event !== 'message' || event.session !== expectedSession || !p) continue;
   if (p.fromMe !== false || typeof p.from !== 'string') continue;
   if (!/^\d{6,20}@(c\.us|lid)$/.test(p.from)) continue;
   if (p.hasMedia || typeof p.body !== 'string') continue;

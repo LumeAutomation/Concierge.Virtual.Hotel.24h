@@ -19,3 +19,8 @@ assert.equal(hash(good.request_id),hash(check()[0].json.request_id));
 assert.notEqual(hash(good.request_id),hash(check({id:'different'})[0].json.request_id));
 assert.match(hash(good.request_id),/^[a-f0-9]{64}$/);
 console.log('WAHA: filtros, validacao e idempotencia passaram.');
+
+const namedRun = new Function('$input',fs.readFileSync(path.join(__dirname,'waha-input.js'),'utf8').replace("const expectedSession = 'default';", 'const expectedSession = "Lume";'));
+assert.equal(namedRun({all:()=>[{json:{...base,session:'Lume'}}]}).length,1);
+assert.deepEqual(namedRun({all:()=>[{json:base}]}),[]);
+console.log('Sessao nomeada aceita; outra sessao bloqueada.');

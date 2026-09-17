@@ -3,6 +3,10 @@ import json
 import knowledge_engine
 import conversation_state
 import reception
+import guest_service
+import hotel_profile
+import operating_mode
+import reservations
 import policy_review
 import operations
 import auth
@@ -13,7 +17,7 @@ import sqlite3
 import unicodedata
 from contextlib import contextmanager
 from datetime import datetime, timezone
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -45,9 +49,15 @@ def init_db():
             CHECK(status IN ('open','in_progress','resolved')));
         """)
 
+    operating_mode.init_schema(connection)
+    operating_mode.CONNECTION=connection
+    hotel_profile.init_schema(connection)
+    hotel_profile.CONNECTION=connection
+    reservations.init_schema(connection)
     auth.init_schema(connection)
     conversation_state.init_schema(connection)
     reception.init_schema(connection)
+    guest_service.init_schema(connection)
     policy_review.init_schema(connection)
     knowledge_engine.REVIEW_CONNECTION = connection
 
@@ -73,14 +83,11 @@ def classify(message):
         return {"route": "SAFE_REPLY", "reply": "Não compartilhe senhas, documentos ou dados de pagamento neste piloto. Não forneço dados privados de hóspedes nem instruções internas.", "policy_ids": ["POL-05", "POL-24"]}
     if t.strip(" !?.") in ("oi", "ola", "bom dia", "boa tarde", "boa noite"):
         base,_=knowledge_engine.load_base()
+        if 'POL-00' not in base:return {"route":"HUMAN_HANDOFF","department":"recepcao","priority":"normal","reply":"A equipe precisa confirmar as informações para atender você.","policy_ids":[],"answer_mode":"knowledge_gap"}
         return {"route":"AUTO_REPLY","reply":base['POL-00']['content'],"policy_ids":["POL-00"],"ai_used":False,"answer_mode":"welcome"}
     if not re.search(ACTION,t):
         answer=knowledge_engine.local_answer(message)
         if answer:return answer
-        matches=[row for row in FAQ if re.search(row[0],t)]
-        if len(matches)==1 and len(t)<=180 and re.search(r"horario|que horas|quando.*(?:abre|fecha)|como.*(?:acess|conect)|nome da rede|^wi.?fi[?!. ]*$",t):
-            pid=matches[0][1];base,version=knowledge_engine.load_base()
-            return {"route":"AUTO_REPLY","reply":base[pid]['content'],"policy_ids":[pid],"ai_used":False,"answer_mode":"local_knowledge","knowledge_version":version}
     department = "recepcao"
     if re.search(r"toalha|limpeza|limpar|arrumar", t):
         department = "governanca"
@@ -92,7 +99,7 @@ def classify(message):
         department = "reservas"
     return {"route": "HUMAN_HANDOFF", "department": department, "priority": "normal",
             "reply": "Preciso de confirmação da equipe para atender esse pedido. Não há reserva, cobrança ou serviço confirmado.",
-            "policy_ids": ["POL-38"]}
+            "policy_ids": ["POL-38"], "answer_mode":"knowledge_gap" if not re.search(ACTION,t) else "service_request"}
 
 def validate_message(body):
     if not isinstance(body, dict):
@@ -111,11 +118,21 @@ def use_knowledge_ai(message):
     return False
 
 
+def stored_message_text(message):
+    text = normalize(message)
+    if reservations.operational(message, text) or text.strip(' .!?') in (
+        'sim','nao','confirmar nome','confirmar dados','corrigir','dados incorretos','concluir','concluir pre-check-in'):
+        return reservations.private_message(message)
+    if re.search(SENSITIVE, text) or re.search(r'\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b', message):
+        return '[conte\u00fado sens\u00edvel omitido]'
+    return message.strip()
+
+
 def knowledge_context(body):
     message,request_id,session_id=validate_message(body)
     with connection() as db:
         previous=db.execute('SELECT session_id,message FROM interactions WHERE id=?',(request_id,)).fetchone()
-    stored="[conteúdo sensível omitido]" if re.search(SENSITIVE,normalize(message)) else message.strip()
+    stored=stored_message_text(message)
     if previous and (previous[0]!=session_id or previous[1]!=stored):raise ValueError('Protocolo ja utilizado por outra mensagem.')
     result=knowledge_engine.build_context(message,request_id,session_id,False)
     result['answer_mode']='local_knowledge_only'
@@ -130,42 +147,89 @@ def handle_knowledge_message(body):
 
 def handle_message(body, _decision=None):
     message, request_id, session_id = validate_message(body)
-    result = classify(message)
-    result.setdefault("ai_used",False)
-    if conversation_state.is_followup(message):
-        result={"route":"AUTO_REPLY","reply":"Sobre qual serviço do hotel você está perguntando?", "policy_ids":[], "answer_mode":"clarification", "ai_used":False}
     # Nao reter conteudo identificado como sensivel.
-    stored_message = "[conteúdo sensível omitido]" if re.search(SENSITIVE, normalize(message)) else message.strip()
+    stored_message = stored_message_text(message)
+    verified_phone = reservations.sender_phone(session_id) if reservations.token_hash(message) or normalize(message).strip(' .!?')=='iniciar' else None
     with connection() as db:
         db.execute("BEGIN IMMEDIATE")
         previous = db.execute("SELECT session_id,message,response FROM interactions WHERE id=?", (request_id,)).fetchone()
         if previous:
             if previous[0] != session_id or previous[1] != stored_message:
                 raise ValueError("request_id já utilizado por outra mensagem.")
-            return json.loads(previous[2])
+            cached=json.loads(previous[2])
+            if operating_mode.production() and (cached.get('mode')!='production' or cached.get('mode_revision')!=operating_mode.get()['revision'] or (cached.get('knowledge_version') and cached['knowledge_version']!=knowledge_engine.load_base()[1])):
+                return {**cached,'reply':'Esta resposta anterior precisa ser conferida pela equipe. Envie novamente sua pergunta.','policy_ids':[],'sources':[],'suppress_response':True}
+            return cached
+        result=classify(message)
+        result.setdefault('ai_used',False)
+        if result.get('priority') != 'urgent' and result.get('route') != 'SAFE_REPLY' and not re.search(ACTION,normalize(message)):
+            if conversation_state.is_followup(message) and result.get('answer_mode') != 'local_knowledge':
+                row=db.execute('SELECT response,created_at FROM interactions WHERE session_id=? ORDER BY created_at DESC,rowid DESC LIMIT 1',(session_id,)).fetchone()
+                context_ids=[]
+                if row and (datetime.now(timezone.utc)-datetime.fromisoformat(row[1])).total_seconds()<1800:
+                    last=json.loads(row[0])
+                    if last.get('answer_mode')=='local_knowledge':context_ids=last.get('policy_ids',[])
+                    elif last.get('answer_mode')=='clarification':context_ids=[c['id'] for c in last.get('clarification_choices',[])]
+                answer=knowledge_engine.local_answer(message,context_ids)
+                result=answer or (result if context_ids or operating_mode.production() else knowledge_engine.clarification())
+        if result.get('priority') != 'urgent' and result.get('route') != 'SAFE_REPLY':
+            service_result=guest_service.handle(db,session_id,normalize(message))
+            if service_result and service_result.get('suppress_response'):
+                result=service_result
+            else:
+                reservation_result = reservations.handle(db,message,session_id,normalize(message),verified_phone)
+                if reservation_result is not None: result = reservation_result
+                elif service_result is not None: result=service_result
         first = not db.execute('SELECT 1 FROM interactions WHERE session_id=? LIMIT 1',(session_id,)).fetchone()
-        if first and result.get('priority')!='urgent' and result.get('route')!='SAFE_REPLY':
-            welcome=knowledge_engine.load_base()[0]['POL-00']['content']
-            if result.get('answer_mode')!='welcome':result['reply']=welcome+'\n\n'+result['reply']
-            result['welcome_included']=True
-            result['welcome_policy_id']='POL-00'
-        result.update({"request_id": request_id, "mode": "local_demo", "persisted": True})
+        if first and not result.get('suppress_response') and result.get('priority')!='urgent' and result.get('route')!='SAFE_REPLY':
+            welcome=knowledge_engine.load_base()[0].get('POL-00',{}).get('content','')
+            if welcome and result.get('answer_mode')!='welcome':result['reply']=welcome+'\n\n'+result['reply']
+            if welcome:
+                result['welcome_included']=True
+                result['welcome_policy_id']='POL-00'
+        result.update({"request_id": request_id, "persisted": True})
+        operating_mode.stamp(result)
+        if operating_mode.production():
+            if result.get('priority')=='urgent':result['reply']='Procure imediatamente a equipe presencial ou o serviço de emergência da sua região. O registro no sistema não significa acionamento de socorro.'
+            elif result.get('route')=='SAFE_REPLY':result['reply']='Não compartilhe senhas, documentos completos ou dados de pagamento pelo chat. Procure a equipe para conferência segura.'
+
         if result["route"] == "HUMAN_HANDOFF":
             result["handoff_id"] = request_id
-            result["reply"] += " Protocolo " + request_id + ": registrado na fila local, aguardando atendimento da recepção."
-        result["sources"] = result.get("sources") or [{"id": pid, "title": knowledge_engine.load_base()[0][pid]["title"]} for pid in result["policy_ids"]]
+            result["reply"] += " Protocolo " + conversation_state.public_protocol(db,"interaction:"+request_id) + ": registrado na fila local, aguardando atendimento da recepção."
+        result["reply"] = conversation_state.display_text(result["reply"])
+        result["sources"] = result.get("sources") or [{"id": pid, "title": p["title"]} for pid in result["policy_ids"] if (p:=knowledge_engine.load_base()[0].get(pid))]
+        if operating_mode.production():result["policy_ids"]=[s["id"] for s in result["sources"]]
+        result["sources"] = [{**source,"title":conversation_state.display_text(source["title"])} for source in result["sources"]]
         db.execute("INSERT INTO interactions VALUES (?,?,?,?,?)", (
             request_id, session_id, stored_message, json.dumps(result, ensure_ascii=False),
             datetime.now(timezone.utc).isoformat()))
         if result["route"] == "HUMAN_HANDOFF":
             db.execute("INSERT INTO handoffs(id,department,priority) VALUES (?,?,?)",
                        (request_id, result["department"], result["priority"]))
+            description=guest_service.capture(db,request_id,session_id,normalize(message),result['department'])
+            if description and result.get('priority')!='urgent':
+                result['reply']=(conversation_state.display_text(welcome)+'\n\n' if first else '')+description+' Protocolo '+conversation_state.public_protocol(db,'interaction:'+request_id)+'.'
+                db.execute('UPDATE interactions SET response=? WHERE id=?',(json.dumps(result,ensure_ascii=False),request_id))
     return result
+
+
+def policy_catalog_view():
+    rows=policy_review.catalog(connection,POLICIES)
+    approved=operating_mode.approved_ids(connection)
+    effective=knowledge_engine.load_base()[0] if operating_mode.production() else None
+    for item in rows:
+        item['production_approved']=item['id'] in approved
+        if effective is not None:item['in_use']=item['id'] in effective
+        item['display']={name:{key:conversation_state.display_text(value) if isinstance(value,str) else value
+                        for key,value in item[name].items()} for name in ('draft','effective')}
+    return rows
+
 
 def list_handoffs():
     return reception.list_rows(connection)
 
-class Handler(BaseHTTPRequestHandler):
+class Routes:
+    """Application routes shared by the WSGI transport and legacy test fixtures."""
     def log_message(self, *_):
         pass
 
@@ -215,6 +279,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def serve_page(self, name):
         payload = (ROOT/'web'/name).read_bytes()
+        if name.endswith('.html'):payload=hotel_profile.page(payload.decode('utf-8-sig')).encode('utf-8')
         self.send_response(200)
         self.send_header('Content-Type', 'application/javascript; charset=utf-8' if name.endswith('.js') else 'text/html; charset=utf-8')
         self.send_header('Content-Length', str(len(payload)))
@@ -229,23 +294,34 @@ class Handler(BaseHTTPRequestHandler):
         if not self.local_request():
             return self.respond(403, {'error': 'Acesso somente local.'})
         if self.path == '/api/health':
-            return self.respond(200, {'status':'ok','mode':'local_demo','channel':'local_rules','storage':'sqlite','staff_auth':True})
+            return self.respond(200, {'status':'ok','mode':'production' if operating_mode.production() else 'local_demo','channel':'local_rules','storage':'sqlite','staff_auth':True})
+        if self.path == '/api/hotel/public':return self.respond(200,hotel_profile.guest_profile())
         if self.path == '/api/auth/me':
             user = self.require_staff(allow_change=True)
             if user: return self.respond(200, user)
             return
-        public = {'/':'index.html','/login':'login.html','/staff.js':'staff.js'}
+        public = {'/':'index.html','/login':'login.html','/staff.js':'staff.js','/guest-service.js':'guest-service.js','/operating-mode.js':'operating-mode.js'}
         if self.path in public:
             return self.serve_page(public[self.path])
         pages = {'/recepcao':('reception','index.html'), '/politicas':('policies','policies.html'),
-                 '/operacao':('operations','operations.html'), '/equipe':('users','team.html')}
+                 '/operacao':('operations','operations.html'), '/equipe':('users','team.html'),
+                 '/reservas':('reception','reservations.html'), '/hotel':('settings','hotel.html')}
         if self.path in pages:
             permission, name = pages[self.path]
             if self.require_staff(permission, page=True): return self.serve_page(name)
             return
-        routes = {'/api/whatsapp/deliveries':('operations',lambda:conversation_state.list_deliveries(connection)),
+        if self.path.startswith('/api/handoffs/thread/'):
+            if not self.require_staff('reception'):return
+            try:return self.respond(200,guest_service.thread(connection,self.path.rsplit('/',1)[-1]))
+            except ValueError as error:return self.respond(404,{'error':str(error)})
+        if self.path.startswith('/api/reservations/'):
+            if not self.require_staff('reception'): return
+            try: return self.respond(200,reservations.detail(connection,self.path.rsplit('/',1)[-1]))
+            except ValueError: return self.respond(404,{'error':'Reserva nao encontrada.'})
+        routes = {'/api/operating-mode':('settings',operating_mode.get), '/api/hotel':('settings',lambda:hotel_profile.get(connection)), '/api/hotel/template':('settings',lambda:hotel_profile.export_template(connection,POLICIES)), '/api/experience':('reception',lambda:guest_service.metrics(connection)), '/api/reservations':('reception',lambda:reservations.list_rows(connection)),
+                  '/api/whatsapp/deliveries':('operations',lambda:conversation_state.list_deliveries(connection)),
                   '/api/operations':('operations',operations.snapshot),
-                  '/api/policies':('policies',lambda:policy_review.catalog(connection,POLICIES)),
+                  '/api/policies':('policies',policy_catalog_view),
                   '/api/handoffs':('reception',list_handoffs),
                   '/api/users':('users',lambda:auth.list_users(connection)),
                   '/api/pilot/contacts':('users',lambda:auth.contacts(connection))}
@@ -279,7 +355,7 @@ class Handler(BaseHTTPRequestHandler):
                 if not user: return
                 result = auth.change_password(connection,user['username'],body.get('old_password'),body.get('password'))
                 return self.respond(200,result,f'{auth.COOKIE}=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0')
-            permissions = {'/api/policies':'approve' if body.get('action')=='approve' or (body.get('action')=='create' and body.get('publish') is True) else 'edit',
+            permissions = {'/api/operating-mode':'settings','/api/policies/production':'approve','/api/hotel':'settings','/api/handoffs/conversation':'reception','/api/reservations':'reception', '/api/policies':'approve' if body.get('action')=='approve' or (body.get('action')=='create' and body.get('publish') is True) else 'edit',
                            '/api/handoffs/status':'reception','/api/users':'users',
                            '/api/users/update':'users','/api/pilot/contacts':'users'}
             if self.path in permissions:
@@ -288,8 +364,13 @@ class Handler(BaseHTTPRequestHandler):
                 # Identity is derived from the session, never from the submitted name.
                 body['actor'] = user['username']
                 body['operator'] = user['username']
-                if self.path == '/api/policies': result=policy_review.change(connection,POLICIES,body)
-                elif self.path == '/api/handoffs/status': result=reception.update(connection,body,allow_notification=lambda sid:auth.allowed_contact(connection,sid))
+                if self.path == '/api/operating-mode':result=operating_mode.save(connection,body,user['username'])
+                elif self.path == '/api/policies/production':result=operating_mode.approve(connection,body,user['username'])
+                elif self.path == '/api/hotel': result=hotel_profile.save(connection,body,user['username'])
+                elif self.path == '/api/reservations': result=reservations.change(connection,body,user['username'])
+                elif self.path == '/api/policies': result=policy_review.change(connection,POLICIES,body)
+                elif self.path == '/api/handoffs/conversation': result=guest_service.staff_action(connection,body,user['username'],allow_notification=lambda sid:auth.allowed_contact(connection,sid) or reservations.access(connection,{'session_id':sid}))
+                elif self.path == '/api/handoffs/status': result=reception.update(connection,body,allow_notification=lambda sid:auth.allowed_contact(connection,sid) or reservations.access(connection,{'session_id':sid}))
                 elif self.path == '/api/users': result=auth.create_user(connection,body,user['username'])
                 elif self.path == '/api/users/update': result=auth.update_user(connection,body,user['username'])
                 else: result=auth.save_contact(connection,body,user['username'])
@@ -298,9 +379,9 @@ class Handler(BaseHTTPRequestHandler):
             whatsapp = str(body.get('session_id','')).startswith(('waha_','wa_'))
             if internal or whatsapp:
                 if not self.service(): return self.respond(401,{'error':'Credencial de integracao necessaria.'})
-                allowed = auth.allowed_contact(connection,body.get('session_id',''))
+                allowed = auth.allowed_contact(connection,body.get('session_id','')) or reservations.access(connection,body)
                 if self.path == '/api/pilot/check': return self.respond(200,{'allowed':allowed,**{k:body[k] for k in ('message','request_id','session_id') if k in body}})
-                if whatsapp and not allowed: return self.respond(403,{'error':'Contato fora do piloto autorizado.'})
+                if whatsapp and not allowed: return self.respond(403,{'error':'Contato sem acesso autorizado à Jornada do Hóspede.'})
             if self.path == '/api/whatsapp/reply':
                 result=conversation_state.deliver(connection,body.get('request_id'),body.get('session_id'))
                 return self.respond(503 if result['needs_review'] else 200,result)
@@ -308,17 +389,27 @@ class Handler(BaseHTTPRequestHandler):
             if self.path == '/api/chat/knowledge': return self.respond(200,handle_knowledge_message(body))
             if self.path == '/api/chat': return self.respond(200,handle_message(body))
             return self.respond(404,{'error':'Nao encontrado.'})
-        except policy_review.Conflict as error:
+        except (policy_review.Conflict, reservations.Conflict, hotel_profile.Conflict, operating_mode.Conflict) as error:
             return self.respond(409,{'error':str(error)})
         except (ValueError, UnicodeError) as error:
             return self.respond(400,{'error':str(error) if isinstance(error,ValueError) else 'Dados invalidos.'})
         except sqlite3.Error:
             return self.respond(503,{'error':'Nao foi possivel registrar. Tente novamente.'})
 
+class Handler(Routes, BaseHTTPRequestHandler):
+    """Compatibility fixture for existing tests; not used by the runtime server."""
+
+
+from web_server import make_application, create_server
+application = make_application(Routes)
+
 if __name__ == "__main__":
     init_db()
     port = int(os.environ.get("AURA_PORT", "8787"))
-    server = ThreadingHTTPServer(("127.0.0.1", port), Handler)
-    print(f"AURA piloto local: http://127.0.0.1:{port}", flush=True)
-    server.serve_forever()
-
+    server = create_server(application, port=port)
+    print(f"AURA / Waitress: http://127.0.0.1:{server.effective_port}", flush=True)
+    try:
+        server.run()
+    finally:
+        server.task_dispatcher.shutdown()
+        server.close()
