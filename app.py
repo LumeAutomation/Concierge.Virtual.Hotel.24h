@@ -7,6 +7,7 @@ import guest_service
 import hotel_profile
 import operating_mode
 import reservations
+import fnrh_service
 import policy_review
 import operations
 import auth
@@ -54,6 +55,7 @@ def init_db():
     hotel_profile.init_schema(connection)
     hotel_profile.CONNECTION=connection
     reservations.init_schema(connection)
+    fnrh_service.init_schema(connection)
     auth.init_schema(connection)
     conversation_state.init_schema(connection)
     reception.init_schema(connection)
@@ -305,7 +307,7 @@ class Routes:
             return self.serve_page(public[self.path])
         pages = {'/recepcao':('reception','index.html'), '/politicas':('policies','policies.html'),
                  '/operacao':('operations','operations.html'), '/equipe':('users','team.html'),
-                 '/reservas':('reception','reservations.html'), '/hotel':('settings','hotel.html')}
+                 '/fnrh':('reception','fnrh.html'), '/reservas':('reception','reservations.html'), '/hotel':('settings','hotel.html')}
         if self.path in pages:
             permission, name = pages[self.path]
             if self.require_staff(permission, page=True): return self.serve_page(name)
@@ -318,7 +320,7 @@ class Routes:
             if not self.require_staff('reception'): return
             try: return self.respond(200,reservations.detail(connection,self.path.rsplit('/',1)[-1]))
             except ValueError: return self.respond(404,{'error':'Reserva nao encontrada.'})
-        routes = {'/api/operating-mode':('settings',operating_mode.get), '/api/hotel':('settings',lambda:hotel_profile.get(connection)), '/api/hotel/template':('settings',lambda:hotel_profile.export_template(connection,POLICIES)), '/api/experience':('reception',lambda:guest_service.metrics(connection)), '/api/reservations':('reception',lambda:reservations.list_rows(connection)),
+        routes = {'/api/fnrh':('reception',lambda:fnrh_service.overview(connection)), '/api/operating-mode':('settings',operating_mode.get), '/api/hotel':('settings',lambda:hotel_profile.get(connection)), '/api/hotel/template':('settings',lambda:hotel_profile.export_template(connection,POLICIES)), '/api/experience':('reception',lambda:guest_service.metrics(connection)), '/api/reservations':('reception',lambda:reservations.list_rows(connection)),
                   '/api/whatsapp/deliveries':('operations',lambda:conversation_state.list_deliveries(connection)),
                   '/api/operations':('operations',operations.snapshot),
                   '/api/policies':('policies',policy_catalog_view),
@@ -355,7 +357,7 @@ class Routes:
                 if not user: return
                 result = auth.change_password(connection,user['username'],body.get('old_password'),body.get('password'))
                 return self.respond(200,result,f'{auth.COOKIE}=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0')
-            permissions = {'/api/operating-mode':'settings','/api/policies/production':'approve','/api/hotel':'settings','/api/handoffs/conversation':'reception','/api/reservations':'reception', '/api/policies':'approve' if body.get('action')=='approve' or (body.get('action')=='create' and body.get('publish') is True) else 'edit',
+            permissions = {'/api/fnrh':'reception', '/api/operating-mode':'settings','/api/policies/production':'approve','/api/hotel':'settings','/api/handoffs/conversation':'reception','/api/reservations':'reception', '/api/policies':'approve' if body.get('action')=='approve' or (body.get('action')=='create' and body.get('publish') is True) else 'edit',
                            '/api/handoffs/status':'reception','/api/users':'users',
                            '/api/users/update':'users','/api/pilot/contacts':'users'}
             if self.path in permissions:
@@ -367,6 +369,7 @@ class Routes:
                 if self.path == '/api/operating-mode':result=operating_mode.save(connection,body,user['username'])
                 elif self.path == '/api/policies/production':result=operating_mode.approve(connection,body,user['username'])
                 elif self.path == '/api/hotel': result=hotel_profile.save(connection,body,user['username'])
+                elif self.path == '/api/fnrh': result=fnrh_service.change(connection,body,user['username'])
                 elif self.path == '/api/reservations': result=reservations.change(connection,body,user['username'])
                 elif self.path == '/api/policies': result=policy_review.change(connection,POLICIES,body)
                 elif self.path == '/api/handoffs/conversation': result=guest_service.staff_action(connection,body,user['username'],allow_notification=lambda sid:auth.allowed_contact(connection,sid) or reservations.access(connection,{'session_id':sid}))

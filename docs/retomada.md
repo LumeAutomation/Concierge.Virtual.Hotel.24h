@@ -1,3 +1,37 @@
+# Correcao da pagina FNRH - 18/09/2026
+
+Diagnostico na porta 8787: API HTTP 200, seis reservas com pre-check-in/check-in local pendente, nenhum erro JavaScript. Ver pendencias abria o detalhe abaixo da lista; simulacao bloqueada sem motivo junto ao botao. Corrigidos foco/rolagem, explicacao do bloqueio, link para Reservas e textos do historico. Teste completo isolado aprovado; atualizar, abrir detalhes e explicacao do bloqueio tambem validados no servico ativo. Nenhuma reserva alterada ou mensagem enviada. Sessoes temporarias de diagnostico removidas.
+
+---
+
+# Validação da retomada — 18/09/2026
+
+Bloco curto para economizar créditos: 31 testes FNRH aprovados (`python -m unittest discover -s tests -p 'test_fnrh*.py'`) e fluxo de navegador aprovado (`python scripts/check_fnrh_browser.py`). Navegador com banco temporário: login, pendências, conferência humana, resultado incerto persistido, reconciliação, repetição bloqueada, histórico e largura de celular. Nenhuma transmissão oficial ou mensagem WhatsApp.
+
+Próximo bloco de implementação: cadastro complementar de hóspedes e acompanhantes. Credenciais e homologação oficial permanecem pendentes. Esta validação não comprova atualização do serviço em execução.
+
+---
+# Continuação — FNRH com painel persistente, 18/09/2026
+
+Tela `/fnrh`, API autenticada e tabelas aditivas `fnrh_jobs`/`fnrh_events` implementadas para ensaios locais persistentes. Tentativas incertas exigem reconciliação humana; ações têm autoria da sessão e histórico. Transporte oficial separado: consulte [uso e limites](fnrh.md) e [contrato do conector](fnrh-connector.md).
+
+Ainda não existe envio oficial pelo painel. Próxima etapa: cadastro complementar e acompanhantes, validação de domínios oficiais, credenciais por hotel e homologação antes de conectar a fila ao transporte. Resultados simulados não podem ser tratados como registros oficiais.
+
+---
+# Continuação — 18/09/2026
+
+A próxima etapa registrada era a preparação FNRH Digital. Entrega local:
+`fnrh.py`, `scripts/simulate_fnrh.py` e testes específicos, sem alterar o
+atendimento em execução. [Mapeamento, limites e roteiro](fnrh.md).
+Equipe dividida entre pesquisa, implementação e revisão.
+
+Próxima entrega: conector e painel com persistência por hotel e reconciliação
+de resultados incertos. Homologação real depende de hotel habilitado e
+credenciais próprias. Nenhuma transmissão oficial realizada.
+O histórico abaixo descreve etapas anteriores.
+
+---
+
 # Atualização de escopo e implementação — 16/09/2026
 
 O usuário definiu que este sistema é um modelo: manter a base demonstrativa e
